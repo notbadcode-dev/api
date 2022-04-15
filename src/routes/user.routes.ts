@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { GetUserById } from "../../controllers/user.controller";
+import { GetUserById } from "../controllers/user.controller";
 
 const userRoutes = {
   getById: "/getById/:id",

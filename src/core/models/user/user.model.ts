@@ -1,17 +1,9 @@
-export interface User {
-  id: string;
-  userName: string;
-  paraphrase: string;
-  createdAt: Date;
-  lastAccessedAt: Date;
-}
-
-export class UserHelper {
-  public static mapToObject(result: any): User | undefined {
-    if (!result && result[0]) {
-      return;
-    }
-
-    return result[0];
-  }
+export class User {
+  constructor(
+    public id: string,
+    public userName: string,
+    public paraphrase: string,
+    public createdAt: Date,
+    public lastAccessedAt: Date
+  ) {}
 }

@@ -1,8 +1,9 @@
 import { connection } from "../../database";
-import { User, UserHelper } from "../models/user/user.model";
+import { QueryHelper } from "../models/query.model";
+import { User } from "../models/user/user.model";
 
 const USER_SQL_STATEMENT = {
-  selectUserWhereId: "SELECT * FROM users WHERE id = ?",
+  selectUserWhereId: "SELECT id, userName FROM users WHERE id = ?",
 };
 
 export class UserService {
@@ -16,7 +17,7 @@ export class UserService {
     connection
       .query(USER_SQL_STATEMENT.selectUserWhereId, userId)
       .then((result: User) => {
-        callback(null, UserHelper.mapToObject(result));
+        callback(null, QueryHelper.mapToObject(result));
       })
       .catch((err) => {
         callback(err);

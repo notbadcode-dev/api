@@ -8,13 +8,12 @@ import { UserService } from "../core/services/user.service";
  * @description Get any user by id
  * @param  {Request} _request
  * @param  {Response} _response
- * @returns {Response}
+ * @returns Response - User
  */
 export const GetUserById = async (_request: Request, _response: Response) => {
-  const { _id } = _request.params;
+  const { id: _id } = _request.params;
 
   UserService.getUserById(_id, (error: Error, user: User) => {
-    console.log(error);
     if (error) {
       return HttpResponseService.sendInternalServerErrorResponse(_response);
     }
