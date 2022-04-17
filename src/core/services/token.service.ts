@@ -1,8 +1,13 @@
 import "dotenv/config";
 
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError, VerifyErrors } from "jsonwebtoken";
 
-import { User } from "../models/user/user.model";
+import {
+  User,
+  UserHelper,
+  VerifyUserToken,
+  VerifyUserTokenHelper,
+} from "../models/user/user.model";
 
 export class TokenService {
   /**
@@ -23,8 +28,20 @@ export class TokenService {
    * @param  {number} userId
    * @returns boolean - true if token is valid
    */
-  public static verifyToken(token: string, userId: number): boolean {
-    const user: any = jwt.verify(token, process.env.JWT_SECRET ?? "");
-    return Number(userId) === Number(user["user"][0].id);
+  public static verifyToken(token: string): any {
+    return jwt.verify(
+      token,
+      process.env.JWT_SECRET as string,
+      (err: any, decode: any) => {
+        return {
+          valid: !err,
+          user: decode
+            ? UserHelper.mapToObject(decode?.user[0])
+            : UserHelper.defaultObject(),
+          token: token,
+          verifyError: err ?? null,
+        };
+      }
+    );
   }
 }

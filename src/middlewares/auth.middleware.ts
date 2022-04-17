@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { HttpResponseService } from "../core/services/http-response.service";
+import { TokenService } from "../core/services/token.service";
 
 export const verifyToken = async (
   request: Request,
@@ -15,14 +16,9 @@ export const verifyToken = async (
   if (!token) {
     return HttpResponseService.sendUnauthrizedResponse(response);
   }
-
-  jwt.verify(token, process.env.JWT_SECRET as string, (err: any, user: any) => {
-    console.log(err);
-
-    if (err) {
-      return HttpResponseService.sendForbiddenResponse(response);
-    }
-
-    next();
-  });
+  const tokenValid: any = TokenService.verifyToken(token).valid;
+  if (!tokenValid) {
+    return HttpResponseService.sendForbiddenResponse(response);
+  }
+  next();
 };

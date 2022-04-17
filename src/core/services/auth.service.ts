@@ -1,6 +1,6 @@
 import { connection } from "../../database";
 import { QueryHelper } from "../models/query.model";
-import { User } from "../models/user/user.model";
+import { User, VerifyUserToken } from "../models/user/user.model";
 import { HttpResponseService } from "./http-response.service";
 import { TokenService } from "./token.service";
 import { UserService } from "./user.service";
@@ -55,9 +55,10 @@ export class AuthService {
       if (error || Number(user.id) !== Number(userId)) {
         callback(null, null);
       }
-
-      if (user) {
-        callback(null, TokenService.verifyToken(token, Number(userId)));
+      const verifyUserToken: VerifyUserToken = TokenService.verifyToken(token);
+      const userFromVerifyToken: User | null = verifyUserToken.user ?? null;
+      if (user && userFromVerifyToken) {
+        callback(null, Number(userId) === Number(userFromVerifyToken.id));
       }
     });
   }
