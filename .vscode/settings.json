@@ -13,5 +13,11 @@
             "username": "notbadcode",
             "password": "6900"
         }
-    ]
+    ],
+    "rest-client.environmentVariables": {
+        "local": {
+            "baseApiPath": "http://localhost:3000/api/notbadcode",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJpZCI6MSwidXNlck5hbWUiOiJub3RiYWRjb2RlLmRldkBnbWFpbC5jb20iLCJwYXJhcGhyYXNlIjoiaG9sYS1tdW5kby1kZXYtem9uZSIsImNyZWF0ZWRBdCI6IjIwMjItMDQtMTBUMjI6MDA6MDAuMDAwWiIsImxhc3RBY2Nlc3NlZEF0IjoiMjAyMi0wNC0xMVQyMjowMDowMC4wMDBaIn1dLCJpYXQiOjE2NTAyMjc1OTEsImV4cCI6MTY1MDIyODE5NX0.GXjoj6GOCAm79xEgijOYKChJeNcT3lNJbjNJX549avA",
+        }
+    }
 }

@@ -15,7 +15,34 @@ export const GetUserById = async (_request: Request, _response: Response) => {
 
   UserService.getUserById(_id, (error: Error, user: User) => {
     if (error) {
-      return HttpResponseService.sendInternalServerErrorResponse(_response);
+      return HttpResponseService.sendInternalServerErrorResponse(
+        _response,
+        error
+      );
+    }
+
+    if (!user) {
+      return HttpResponseService.sendNotFoundResponse(_response, "User");
+    }
+    return HttpResponseService.sendSuccesResponse(_response, "", user);
+  });
+};
+
+/**
+ * @description Create user
+ * @param  {Request} _request
+ * @param  {Response} _response
+ * @returns Response - User
+ */
+export const CreateUser = async (_request: Request, _response: Response) => {
+  const _user: User = _request.body;
+
+  UserService.createUser(_user, (error: Error, user: User) => {
+    if (error) {
+      return HttpResponseService.sendInternalServerErrorResponse(
+        _response,
+        error
+      );
     }
 
     if (!user) {

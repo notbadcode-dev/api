@@ -15,7 +15,7 @@ export class UserHelper {
     return new User("", "");
   }
 
-  public static mapToObject(user: User): User | null {
+  public static mapToObject(user: User): User {
     if (user) {
       return new User(
         user.id,

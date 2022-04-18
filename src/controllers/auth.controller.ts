@@ -14,7 +14,10 @@ export const SignIn = async (_request: Request, _response: Response) => {
   const { userName: _userName, paraphrase: _paraphrase } = _request.body;
   AuthService.signIn(_userName, _paraphrase, (error: Error, user: User) => {
     if (error) {
-      return HttpResponseService.sendInternalServerErrorResponse(_response);
+      return HttpResponseService.sendInternalServerErrorResponse(
+        _response,
+        error
+      );
     }
 
     if (!user) {
@@ -39,7 +42,10 @@ export const KeepSession = async (_request: Request, _response: Response) => {
     token as string,
     (error: Error, verifyToken: boolean) => {
       if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(_response);
+        return HttpResponseService.sendInternalServerErrorResponse(
+          _response,
+          error
+        );
       }
 
       if (!verifyToken) {

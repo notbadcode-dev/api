@@ -28,7 +28,10 @@ export class HttpResponseService {
    * @param  {Response} _response
    * @returns {Response}
    */
-  public static sendInternalServerErrorResponse(_response: Response): Response {
+  public static sendInternalServerErrorResponse(
+    _response: Response,
+    error: Error
+  ): Response {
     return this.sendResponse(
       _response,
       HTTP_RESPONSE_CODE.INTERNAL_SERVER_ERROR,
@@ -36,7 +39,7 @@ export class HttpResponseService {
         data: null,
         messageResponseList: [
           {
-            content: HTTP_RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+            content: `${HTTP_RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR} - ${error}`,
             type: MessageType.error,
           },
         ],
