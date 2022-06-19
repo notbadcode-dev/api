@@ -6,4 +6,12 @@ export class QueryHelper {
 
     return result[0];
   }
+
+  public static mapToObjectLst(result: any): any | undefined {
+    if (!result) {
+      return;
+    }
+
+    return result;
+  }
 }

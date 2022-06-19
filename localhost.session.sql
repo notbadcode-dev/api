@@ -1,36 +1,20 @@
-CREATE TABLE IF NOT EXISTS users (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    userName VARCHAR(100) NOT NULL,
-    paraphrase VARCHAR(250) NOT NULL,
-    createAt DATETIME NOT NULL,
-    lastAccessAt DATETIME NOT NULL
-);
-CREATE TABLE IF NOT EXISTS groups (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    userId INT NOT NULL,
-    title VARCHAR(50) NOT NULL,
-    description VARCHAR(250),
-    createAt DATETIME NOT NULL,
-    FOREIGN KEY (userId) REFERENCES users(id)
-);
-CREATE TABLE IF NOT EXISTS links (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    link VARCHAR(250) NOT NULL,
-    createAt DATETIME NOT NULL
-);
-CREATE TABLE IF NOT EXISTS groupLinks (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    groupId INT NOT NULL,
-    linkId INT NOT NULL,
-    FOREIGN KEY (groupId) REFERENCES groups(id),
-    FOREIGN KEY (linkId) REFERENCES links(id)
-);
-CREATE TABLE IF NOT EXISTS usersLinks (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(250) NOT NULL,
-    userId INT NOT NULL,
-    linkId INT NOT NULL,
-    isFavorite BOOLEAN NOT NULL DEFAULT false,
-    FOREIGN KEY (userId) REFERENCES users(id),
-    FOREIGN KEY (linkId) REFERENCES links(id)
-);
+SELECT usersLinks.id AS userLinkId,
+    usersLinks.name AS name,
+    links.link AS link,
+    links.createdAt AS linkCreateDate,
+    groups.id AS groupId,
+    groups.name AS groupName,
+    groups.description AS groupDescription
+FROM usersLinks
+    LEFT OUTER JOIN links ON(links.id = usersLinks.id)
+    LEFT OUTER JOIN groupsLinks ON(groupsLinks.linkId = usersLinks.linkId)
+    LEFT OUTER JOIN groups ON(groups.id = groupsLinks.groupId)
+WHERE usersLinks.userId = 1
+    AND usersLinks.active = 1
+ORDER BY groupName ASC;
+SELECT *
+FROM groupsLinks;
+SELECT *
+FROM users
+WHERE userName = "notbadcode.dev@gmail.com"
+    and paraphrase = "hola-mundo-dev-zone"

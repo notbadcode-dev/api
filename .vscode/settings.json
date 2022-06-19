@@ -12,6 +12,19 @@
             "database": "links",
             "username": "notbadcode",
             "password": "6900"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "askForPassword": true,
+            "driver": "MariaDB",
+            "name": "links",
+            "database": "links",
+            "username": "root"
         }
     ],
     "rest-client.environmentVariables": {

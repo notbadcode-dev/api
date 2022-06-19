@@ -1,14 +1,8 @@
+import { QUERY } from "../../constants/query.constant";
 import { connection } from "../../database";
-import { QueryHelper } from "../models/query.model";
-import { User, VerifyUserToken } from "../models/user/user.model";
-import { HttpResponseService } from "./http-response.service";
+import { User, VerifyUserToken } from "../models/user.model";
 import { TokenService } from "./token.service";
 import { UserService } from "./user.service";
-
-const AUTH_SQL_STATEMENT = {
-  selectUserWhereUserNameAndParaphrase:
-    "SELECT * FROM users WHERE userName = ? and paraphrase = ?",
-};
 
 export class AuthService {
   /**
@@ -24,10 +18,12 @@ export class AuthService {
     callback: CallableFunction
   ): void {
     connection
-      .query(AUTH_SQL_STATEMENT.selectUserWhereUserNameAndParaphrase, [
-        userName,
-        paraphrase,
-      ])
+      .query(
+        QUERY.AUTH.SELECT_USER_WHERE_USERNAME_AND_PHARAPHRASE(
+          userName,
+          paraphrase
+        )
+      )
       .then((result: User) => {
         if (result) {
           callback(null, TokenService.generateToken(result));

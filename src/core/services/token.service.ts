@@ -1,13 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "dotenv/config";
 
-import jwt, { JsonWebTokenError, VerifyErrors } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
-import {
-  User,
-  UserHelper,
-  VerifyUserToken,
-  VerifyUserTokenHelper,
-} from "../models/user/user.model";
+import { User, UserHelper } from "../models/user.model";
 
 export class TokenService {
   /**
@@ -43,5 +39,14 @@ export class TokenService {
         };
       }
     );
+  }
+
+  /**
+   * @description Generate secret from JWT_SECRET and user data.
+   * @param  {User} user
+   * @returns string
+   */
+  public generateSecretToken(user: User): string {
+    return process.env.JWT_SECRET + user.userName + user.paraphrase;
   }
 }

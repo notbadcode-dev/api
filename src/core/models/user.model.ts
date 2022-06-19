@@ -2,7 +2,7 @@ import { JsonWebTokenError } from "jsonwebtoken";
 
 export class User {
   constructor(
-    public id: string,
+    public id: number,
     public userName: string,
     public paraphrase?: string,
     public createdAt?: Date,
@@ -12,7 +12,7 @@ export class User {
 
 export class UserHelper {
   public static defaultObject(): User {
-    return new User("", "");
+    return new User(0, "");
   }
 
   public static mapToObject(user: User): User {

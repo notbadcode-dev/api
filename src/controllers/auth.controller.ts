@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { User } from "../core/models/user/user.model";
+import { User } from "../core/models/user.model";
 import { AuthService } from "../core/services/auth.service";
 import { HttpResponseService } from "../core/services/http-response.service";
 

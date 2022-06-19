@@ -2,13 +2,13 @@ import { Router } from "express";
 
 import { KeepSession, SignIn } from "../controllers/auth.controller";
 
-const userRoutes = {
+const authRoutes = {
   sign: "/sign",
   keep: "/keep/:id",
 };
 
 const routes = Router();
-routes.post(userRoutes.sign, SignIn);
-routes.post(userRoutes.keep, KeepSession);
+routes.post(authRoutes.sign, SignIn);
+routes.post(authRoutes.keep, KeepSession);
 
 export default routes;

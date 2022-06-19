@@ -1,19 +1,11 @@
-import { resolve } from "path";
-import { nextTick } from "process";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { from } from "rxjs";
+import { ERROR_MESSAGE } from "../../constants/error-message.constant";
 
+import { QUERY } from "../../constants/query.constant";
 import { connection } from "../../database";
 import { QueryHelper } from "../models/query.model";
-import { SQLExecuteResult } from "../models/sql.model";
-import { User, UserHelper } from "../models/user/user.model";
-import { UtilDateService } from "../utils/util-date.service";
-
-const USER_SQL_STATEMENT = {
-  selectUserWhereId: "SELECT id, userName FROM users WHERE id = ?",
-  selectUserWhereUserName: "SELECT id, userName FROM users WHERE userName = ?",
-  createUser:
-    "INSERT INTO users (id, userName, paraphrase, createdAt, lastAccessedAt)",
-};
+import { User, UserHelper } from "../models/user.model";
 
 export class UserService {
   /**
@@ -24,7 +16,7 @@ export class UserService {
    */
   public static getUserById(userId: string, callback: CallableFunction): void {
     connection
-      .query(USER_SQL_STATEMENT.selectUserWhereId, userId)
+      .query(QUERY.USER.SELECT_USER_WHERE_ID(Number(userId)))
       .then((result: User) => {
         callback(null, QueryHelper.mapToObject(result));
       })
@@ -40,10 +32,7 @@ export class UserService {
    * @returns void - User callback function for get response
    */
   private static getUserByUserName(userName: string): Promise<User> {
-    return connection.query(
-      USER_SQL_STATEMENT.selectUserWhereUserName,
-      userName
-    );
+    return connection.query(QUERY.USER.SELECT_USER_WHERE_USERNAME(userName));
   }
 
   /**
@@ -52,36 +41,27 @@ export class UserService {
    * @param  {CallableFunction} callback
    * @returns void - User callback function for get response
    */
-  public static createUser(newUser: User, callback: CallableFunction): void {
-    const getUserByUserName$ = from(this.getUserByUserName(newUser.userName));
-    getUserByUserName$.subscribe({
-      next: () => {
-        const foundUser: any = UserHelper.mapToObject.bind(this) ?? null;
-        if (foundUser && !foundUser.id) {
-          const insertValues = ` value(null, '${newUser.userName}', '${
-            newUser.paraphrase
-          }', '${UtilDateService.formatDate(
-            "YYYY-MM-DD HH:mm:ss"
-          )}', null) RETURNING id, userName`;
-          connection
-            .execute(USER_SQL_STATEMENT.createUser + insertValues)
-            .then((insertedUser: User) => {
-              if (!insertedUser) {
-                callback("Failed to create user");
-              }
+  public static async createUser(
+    newUser: User,
+    callback: CallableFunction
+  ): Promise<void> {
+    const foundUser: User = await this.getUserByUserName(newUser.userName);
 
-              return callback(null, insertedUser);
-            })
-            .catch((err) => {
-              return callback(err.text);
-            });
-        } else {
-          return callback("Already exist user with Username.");
-        }
-      },
-      error: () => {
-        callback(this);
-      },
-    });
+    if (foundUser && !foundUser.id) {
+      connection
+        .execute(QUERY.USER.CREATE_USER(newUser))
+        .then((insertedUser: User) => {
+          if (!insertedUser) {
+            callback(ERROR_MESSAGE.FAILED_CREATE_ANY("user"));
+          }
+
+          return callback(null, insertedUser);
+        })
+        .catch((err) => {
+          return callback(err.text);
+        });
+    } else {
+      return callback(ERROR_MESSAGE.FAILED_CREATE_ANY("user"));
+    }
   }
 }
