@@ -3,6 +3,8 @@ import { QUERY } from "../../constants/query.constant";
 import { connection } from "../../database";
 import {
   LinkHelper,
+  ReorderLinkRequestDto,
+  ReorderLinkResponseDto,
   UserLinkDto,
   UserLinkDtoHelper,
 } from "../models/link.model";
@@ -35,7 +37,7 @@ export class LinkService {
         );
       })
       .catch((err) => {
-        callback(err);
+        callback(ERROR_MESSAGE.FAILED_GET_ANY("Link list"));
       });
   }
 
@@ -176,6 +178,12 @@ export class LinkService {
     }
   }
 
+  /**
+   * @description Update link
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - LinkId
+   */
   public static async update(
     link: UserLinkDto,
     userId: number,
@@ -230,52 +238,249 @@ export class LinkService {
       });
   }
 
+  /**
+   * @description Delete Link
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - Deleted link
+   */
+  public static async delete(
+    linkId: number,
+    userId: number,
+    callback: CallableFunction
+  ) {
+    const resultLinkById: UserLinkDto[] = await connection
+      .query(QUERY.LINK.SELECT_LINK_BY_LINK_ID_AND_USER_ID(userId, linkId))
+      .catch((err) => {
+        callback(ERROR_MESSAGE.FAILED_DELETE_ANY("link"));
+      });
+
+    QueryService.controlUndefinedResult(
+      resultLinkById[0],
+      () => {
+        callback(ERROR_MESSAGE.FAILED_DELETE_ANY("link"));
+      },
+      () => {
+        connection
+          .query(QUERY.LINK.DELETE_LINK(linkId, userId))
+          .then((result: UserLinkDto[]) => {
+            callback(null, result[0]);
+          })
+          .catch((err) => {
+            callback(ERROR_MESSAGE.FAILED_DELETE_ANY("link"));
+          });
+      }
+    );
+  }
+
+  /**
+   * @description Toggle Favorite
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - Modified Link
+   */
   public static async toggleFavorite(
     linkId: number,
     userId: number,
     callback: CallableFunction
   ) {
-    const resultLinkById = await connection
+    const resultLinkById: UserLinkDto[] = await connection
       .query(QUERY.LINK.SELECT_LINK_BY_LINK_ID_AND_USER_ID(userId, linkId))
       .catch((err) => {
         callback(ERROR_MESSAGE.FAILED_UPDATE_ANY("link"));
       });
 
-    if (resultLinkById[0] !== undefined) {
-      connection
-        .query(QUERY.LINK.TOGGLE_FAVORITE(linkId, userId))
-        .then((result: UserLinkDto[]) => {
-          callback(null, true);
-        })
-        .catch((err) => {
-          callback(ERROR_MESSAGE.FAILED_UPDATE_ANY("link"));
-        });
-    }
+    QueryService.controlUndefinedResult(
+      resultLinkById[0],
+      () => {
+        callback(ERROR_MESSAGE.FAILED_GET_ANY("link"));
+      },
+      () => {
+        connection
+          .query(QUERY.LINK.TOGGLE_FAVORITE(linkId, userId))
+          .then((result: UserLinkDto[]) => {
+            QueryService.controlUndefinedResult(
+              result,
+              () => {
+                callback(
+                  ERROR_MESSAGE.FAILED_MARK_TO_FAVORITE_LINK(
+                    "link",
+                    resultLinkById[0]
+                  )
+                );
+              },
+              () => {
+                this.getLinkByUserLinkIdAndUserId(linkId, userId, callback);
+              }
+            );
+          })
+          .catch((err) => {
+            callback(
+              ERROR_MESSAGE.FAILED_MARK_TO_FAVORITE_LINK(
+                "link",
+                resultLinkById[0]
+              )
+            );
+          });
+      }
+    );
   }
 
+  /**
+   * @description Toggle Active
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - Modified Link
+   */
   public static async toggleActive(
     linkId: number,
     userId: number,
     callback: CallableFunction
   ) {
-    const resultLinkById = await connection
+    const resultLinkById: UserLinkDto[] = await connection
       .query(QUERY.LINK.SELECT_LINK_BY_LINK_ID_AND_USER_ID(userId, linkId))
       .catch((err) => {
-        callback(ERROR_MESSAGE.FAILED_UPDATE_ANY("link"));
+        ERROR_MESSAGE.FAILED_GET_ANY("link");
       });
 
-    if (resultLinkById[0] !== undefined) {
-      connection
-        .query(QUERY.LINK.TOGGLE_ACTIVE(linkId, userId))
-        .then((result: UserLinkDto[]) => {
-          callback(null, true);
-        })
-        .catch((err) => {
-          callback(ERROR_MESSAGE.FAILED_UPDATE_ANY("link"));
-        });
+    QueryService.controlUndefinedResult(
+      resultLinkById[0],
+      () => {
+        callback(ERROR_MESSAGE.FAILED_GET_ANY("link"));
+      },
+      () => {
+        connection
+          .query(QUERY.LINK.TOGGLE_ACTIVE(linkId, userId))
+          .then((result: UserLinkDto[]) => {
+            QueryService.controlUndefinedResult(
+              result,
+              () => {
+                callback(
+                  ERROR_MESSAGE.FAILED_MARK_TO_ACTIVE_LINK(
+                    "link",
+                    resultLinkById[0]
+                  )
+                );
+              },
+              () => {
+                this.getLinkByUserLinkIdAndUserId(linkId, userId, callback);
+              }
+            );
+          })
+          .catch((err) => {
+            callback(
+              ERROR_MESSAGE.FAILED_MARK_TO_ACTIVE_LINK(
+                "link",
+                resultLinkById[0]
+              )
+            );
+          });
+      }
+    );
+  }
+  /**
+   * @description Toggle Active
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - Modified Link
+   */
+  public static async recorderLink(
+    reorderlinkRequest: ReorderLinkRequestDto,
+    userId: number,
+    callback: CallableFunction
+  ) {
+    const newLinkOnPosition: UserLinkDto[] = await connection
+      .query(
+        QUERY.LINK.SELECT_LINK_BY_LINK_ID_AND_USER_ID(
+          userId,
+          reorderlinkRequest.newLinkIdOnPosition
+        )
+      )
+      .catch((err) => {
+        callback(ERROR_MESSAGE.FAILED_GET_ANY("link"));
+      });
+
+    const lastLinkOnPosition: UserLinkDto[] = await connection
+      .query(
+        QUERY.LINK.SELECT_LINK_BY_LINK_ID_AND_USER_ID(
+          userId,
+          reorderlinkRequest.lastLinkIdOnPosition
+        )
+      )
+      .catch((err) => {
+        callback(ERROR_MESSAGE.FAILED_GET_ANY("link"));
+      });
+
+    if (
+      newLinkOnPosition[0] === undefined &&
+      lastLinkOnPosition[0] === undefined
+    ) {
+      callback(ERROR_MESSAGE.FAILED_REORDER_LINK("link", newLinkOnPosition[0]));
+      return;
     }
+
+    if (newLinkOnPosition[0].linkId === lastLinkOnPosition[0].linkId) {
+      callback(ERROR_MESSAGE.FAILED_REORDER_LINK("link", newLinkOnPosition[0]));
+      return;
+    }
+
+    if (newLinkOnPosition[0].groupId !== lastLinkOnPosition[0].groupId) {
+      callback(ERROR_MESSAGE.FAILED_REORDER_LINK("link", newLinkOnPosition[0]));
+      return;
+    }
+
+    const { groupId, newLinkIdOnPosition, lastLinkIdOnPosition } =
+      reorderlinkRequest;
+    const newOrder =
+      lastLinkOnPosition[0]?.linkOrder ?? newLinkOnPosition[0]?.linkOrder ?? 0;
+    const lastOrder =
+      newLinkOnPosition[0]?.linkOrder ?? lastLinkOnPosition[0]?.linkOrder ?? 0;
+
+    connection
+      .query(
+        QUERY.GROUP.REORDER_LINK_ON_GROUP(
+          newOrder,
+          groupId,
+          newLinkIdOnPosition
+        )
+      )
+      .then(() => {
+        connection
+          .query(
+            QUERY.GROUP.REORDER_LINK_ON_GROUP(
+              lastOrder,
+              groupId,
+              lastLinkIdOnPosition
+            )
+          )
+          .then(() => {
+            callback(
+              null,
+              new ReorderLinkResponseDto(
+                newLinkOnPosition[0],
+                lastLinkOnPosition[0]
+              )
+            );
+          })
+          .catch((err) => {
+            callback(
+              ERROR_MESSAGE.FAILED_REORDER_LINK("link", newLinkOnPosition[0])
+            );
+          });
+      })
+      .catch((err) => {
+        callback(
+          ERROR_MESSAGE.FAILED_REORDER_LINK("link", newLinkOnPosition[0])
+        );
+      });
   }
 
+  /**
+   * @description Filtered and return only active links
+   * @param  {UserLinkDto[]} linkList
+   * @param  {number} active
+   * @param  {number} favorite
+   */
   private static filteredLinkList(
     linkList: UserLinkDto[],
     active: number,

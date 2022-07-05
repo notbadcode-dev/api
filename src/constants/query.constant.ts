@@ -102,15 +102,14 @@ export const QUERY = {
     REORDER_LINK_ON_GROUP: (
       newLinkOrder: number,
       groupId: number,
-      linkId: number,
-      currentLinkOrder: number
+      linkId: number
     ) => {
       return UtilQueryService.formatQuery(
-        "UPDATE groupsLinks set linkOrder = {0} " +
+        "UPDATE " +
+          "groupsLinks set linkOrder={0} " +
           "WHERE groupId = {1} " +
-          "AND linkId = {2} " +
-          "AND linkOrder = {3};",
-        [newLinkOrder, groupId, linkId, currentLinkOrder]
+          "AND linkId = {2};",
+        [newLinkOrder, groupId, linkId]
       );
     },
   },
@@ -296,6 +295,16 @@ export const QUERY = {
           "usersLinks SET active = IF(active=1, 0, 1) " +
           "WHERE id = {0} " +
           "AND userId = {1};",
+        [userLinkId, userId]
+      );
+    },
+
+    DELETE_LINK: (userLinkId: number, userId: number) => {
+      return UtilQueryService.formatQuery(
+        "DELETE FROM " +
+          "usersLinks " +
+          "WHERE id = {0} " +
+          "AND userId = {1} RETURNING *;",
         [userLinkId, userId]
       );
     },

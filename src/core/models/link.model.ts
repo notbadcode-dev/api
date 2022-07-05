@@ -1,4 +1,5 @@
 import { TinyInt } from "../enums/global.enum";
+import { UserLink } from "./user-link.model";
 
 export class Link {
   constructor(
@@ -39,7 +40,6 @@ export class UserLinkDto {
     public lastModifiedAt?: Date | null
   ) {}
 }
-
 export class UserLinkDtoHelper {
   static defaultObject(): UserLinkDto {
     return new UserLinkDto(
@@ -92,4 +92,19 @@ export class UserLinkDtoHelper {
 
     return [];
   }
+}
+
+export class ReorderLinkRequestDto {
+  constructor(
+    public groupId: number,
+    public newLinkIdOnPosition: number,
+    public lastLinkIdOnPosition: number
+  ) {}
+}
+
+export class ReorderLinkResponseDto {
+  constructor(
+    public newLinkonPosition: UserLinkDto,
+    public lastLinkIdOnPosition: UserLinkDto
+  ) {}
 }

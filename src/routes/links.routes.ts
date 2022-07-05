@@ -8,6 +8,8 @@ import {
   Update,
   ToggleFavorite,
   ToggleActive,
+  DeleteLink,
+  ReorderLinkOnGroup,
 } from "../controllers/links.controller";
 
 const linkRoutes = {
@@ -16,8 +18,10 @@ const linkRoutes = {
   getLinkByUserLinkIdAndUserId: "/getLinkByUserLinkIdAndUserId/:userLinkId",
   create: "/create",
   update: "/update",
+  delete: "/delete/:userLinkId",
   toggleFavorite: "/toggleFavorite/:userLinkId",
   toggleActive: "/toggleActive/:userLinkId",
+  reorderLink: "/reorderLink",
 };
 
 const routes = Router();
@@ -26,7 +30,9 @@ routes.get(linkRoutes.getAllByUserAndGroupId, GetLinkListByUserIdAndGroupId);
 routes.get(linkRoutes.getLinkByUserLinkIdAndUserId, GetLinkByUserLinkId);
 routes.post(linkRoutes.create, Create);
 routes.put(linkRoutes.update, Update);
+routes.delete(linkRoutes.delete, DeleteLink);
 routes.put(linkRoutes.toggleFavorite, ToggleFavorite);
 routes.put(linkRoutes.toggleActive, ToggleActive);
+routes.post(linkRoutes.reorderLink, ReorderLinkOnGroup);
 
 export default routes;
