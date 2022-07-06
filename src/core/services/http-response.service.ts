@@ -5,7 +5,10 @@ import {
   HTTP_RESPONSE_MESSAGE,
 } from "../../constants/http-response.constant";
 import { MessageType } from "../enums/message.enum";
-import { HttpResponse } from "../models/http-response.model";
+import {
+  HttpResponse,
+  ManageSendResponse,
+} from "../models/http-response.model";
 
 export class HttpResponseService {
   /**
@@ -123,5 +126,26 @@ export class HttpResponseService {
         },
       ],
     });
+  }
+
+  public static manageSendResponse(
+    manageSendResponse: ManageSendResponse
+  ): Response {
+    const { response, error, resource, resourceDescription } =
+      manageSendResponse;
+    if (error) {
+      return HttpResponseService.sendInternalServerErrorResponse(
+        response,
+        error
+      );
+    }
+
+    if (!resource) {
+      return HttpResponseService.sendNotFoundResponse(
+        response,
+        resourceDescription
+      );
+    }
+    return HttpResponseService.sendSuccesResponse(response, "", resource);
   }
 }

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { ManageSendResponse } from "../core/models/http-response.model";
 
 import {
   ReorderLinkRequestDto,
@@ -26,17 +27,9 @@ export const GetLinkListByUserId = async (
     Number(_active),
     Number(_favorite),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link list");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link list")
+      );
     }
   );
 };
@@ -61,17 +54,9 @@ export const GetLinkListByUserIdAndGroupId = async (
     Number(_active),
     Number(_favorite),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link list");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link list")
+      );
     }
   );
 };
@@ -94,17 +79,9 @@ export const GetLinkByUserLinkId = async (
     Number(_userLinkId),
     Number(_userId),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link list")
+      );
     }
   );
 };
@@ -123,17 +100,9 @@ export const Create = async (_request: Request, _response: Response) => {
     link,
     Number(_userId),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link")
+      );
     }
   );
 };
@@ -152,17 +121,9 @@ export const Update = async (_request: Request, _response: Response) => {
     link,
     Number(_userId),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link")
+      );
     }
   );
 };
@@ -181,17 +142,9 @@ export const DeleteLink = async (_request: Request, _response: Response) => {
     Number(_userLinkId),
     Number(_userId),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link")
+      );
     }
   );
 };
@@ -213,17 +166,9 @@ export const ToggleFavorite = async (
     Number(_userLinkId),
     Number(_userId),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link")
+      );
     }
   );
 };
@@ -242,17 +187,9 @@ export const ToggleActive = async (_request: Request, _response: Response) => {
     Number(_userLinkId),
     Number(_userId),
     (error: Error, linkList: UserLinkDto[]) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!linkList) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(_response, "", linkList);
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, linkList, "Link")
+      );
     }
   );
 };
@@ -268,20 +205,8 @@ export const ReorderLinkOnGroup = async (
     reorderlinkRequest,
     Number(_userId),
     (error: Error, reorderLinkResponseDto: ReorderLinkResponseDto) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
-        );
-      }
-
-      if (!reorderLinkResponseDto) {
-        return HttpResponseService.sendNotFoundResponse(_response, "Link");
-      }
-      return HttpResponseService.sendSuccesResponse(
-        _response,
-        "",
-        reorderLinkResponseDto
+      return HttpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, reorderLinkResponseDto, "Link")
       );
     }
   );

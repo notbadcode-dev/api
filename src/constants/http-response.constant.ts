@@ -18,4 +18,5 @@ export const HTTP_RESPONSE_MESSAGE = {
   FORBIDDEN: "Forbidden",
   NOT_FOUND: "not found",
   INTERNAL_SERVER_ERROR: "Internal server error",
+  CRITICAL_ERROR: "Critical error",
 };
