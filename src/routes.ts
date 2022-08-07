@@ -1,14 +1,15 @@
 import { Router } from "express";
 
-import { authMiddleware } from "./middlewares/index.middleware";
 import AuthRoutes from "./routes/auth.routes";
 import UserRoutes from "./routes/user.routes";
-import LinksRoutes from "./routes/links.routes";
+import LinkRoutes from "./routes/link.routes";
+import LinkGrouoRoutes from "./routes/linkGroup.routes";
 
 const router = Router();
 
 router.use(`/auth/`, AuthRoutes);
 router.use(`/user/`, UserRoutes);
-router.use(`/links/`, LinksRoutes);
+router.use(`/link/`, LinkRoutes);
+router.use(`/linkGroup/`, LinkGrouoRoutes);
 
 export default router;

@@ -22,8 +22,10 @@ export class HttpResponseService {
     _response: Response,
     httpErrorCode: number,
     httpResponse: HttpResponse
-  ): Response {
-    return _response.status(httpErrorCode).send(httpResponse);
+  ): Response | void | void {
+    if (!_response.writableFinished) {
+      return _response.status(httpErrorCode).json(httpResponse);
+    }
   }
 
   /**
@@ -34,7 +36,7 @@ export class HttpResponseService {
   public static sendInternalServerErrorResponse(
     _response: Response,
     error: Error
-  ): Response {
+  ): Response | void | void {
     return this.sendResponse(
       _response,
       HTTP_RESPONSE_CODE.INTERNAL_SERVER_ERROR,
@@ -59,7 +61,7 @@ export class HttpResponseService {
   public static sendNotFoundResponse(
     _response: Response,
     notFoundEntity: string
-  ): Response {
+  ): Response | void {
     return this.sendResponse(_response, HTTP_RESPONSE_CODE.NOT_FOUND, {
       data: null,
       messageResponseList: [
@@ -76,7 +78,7 @@ export class HttpResponseService {
    * @param  {Response} _response
    * @returns Response
    */
-  public static sendForbiddenResponse(_response: Response): Response {
+  public static sendForbiddenResponse(_response: Response): Response | void {
     return this.sendResponse(_response, HTTP_RESPONSE_CODE.FORBIDDEN, {
       data: null,
       messageResponseList: [
@@ -93,7 +95,7 @@ export class HttpResponseService {
    * @param  {Response} _response
    * @returns Response
    */
-  public static sendUnauthrizedResponse(_response: Response): Response {
+  public static sendUnauthrizedResponse(_response: Response): Response | void {
     return this.sendResponse(_response, HTTP_RESPONSE_CODE.UNAUTHORIZED, {
       data: null,
       messageResponseList: [
@@ -116,7 +118,7 @@ export class HttpResponseService {
     _response: Response,
     successMessage: string,
     sendData: any
-  ): Response {
+  ): Response | void {
     return this.sendResponse(_response, HTTP_RESPONSE_CODE.OK, {
       data: sendData,
       messageResponseList: [
@@ -130,7 +132,7 @@ export class HttpResponseService {
 
   public static manageSendResponse(
     manageSendResponse: ManageSendResponse
-  ): Response {
+  ): Response | void {
     const { response, error, resource, resourceDescription } =
       manageSendResponse;
     if (error) {

@@ -3,7 +3,7 @@ import "dotenv/config";
 import { Request, Response } from "express";
 
 import { HttpResponseService } from "../core/services/http-response.service";
-import { TokenService } from "../core/services/token.service";
+import { TokenService } from "../services/token.service";
 
 export const verifyToken = async (
   request: Request,

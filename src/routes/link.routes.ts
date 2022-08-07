@@ -9,8 +9,7 @@ import {
   ToggleFavorite,
   ToggleActive,
   DeleteLink,
-  ReorderLinkOnGroup,
-} from "../controllers/links.controller";
+} from "../controllers/link.controller";
 
 const linkRoutes = {
   getAllByUserId: "/getAll",
@@ -21,7 +20,6 @@ const linkRoutes = {
   delete: "/delete/:userLinkId",
   toggleFavorite: "/toggleFavorite/:userLinkId",
   toggleActive: "/toggleActive/:userLinkId",
-  reorderLink: "/reorderLink",
 };
 
 const routes = Router();
@@ -33,6 +31,5 @@ routes.put(linkRoutes.update, Update);
 routes.delete(linkRoutes.delete, DeleteLink);
 routes.put(linkRoutes.toggleFavorite, ToggleFavorite);
 routes.put(linkRoutes.toggleActive, ToggleActive);
-routes.post(linkRoutes.reorderLink, ReorderLinkOnGroup);
 
 export default routes;

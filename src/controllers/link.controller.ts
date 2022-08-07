@@ -1,13 +1,9 @@
 import { Request, Response } from "express";
 import { ManageSendResponse } from "../core/models/http-response.model";
 
-import {
-  ReorderLinkRequestDto,
-  ReorderLinkResponseDto,
-  UserLinkDto,
-} from "../core/models/link.model";
+import { UserLinkDto } from "../core/models/link.model";
 import { HttpResponseService } from "../core/services/http-response.service";
-import { LinkService } from "../core/services/link.service";
+import { LinkService } from "../services/link.service";
 
 /**
  * @description Get link list by userId
@@ -189,24 +185,6 @@ export const ToggleActive = async (_request: Request, _response: Response) => {
     (error: Error, linkList: UserLinkDto[]) => {
       return HttpResponseService.manageSendResponse(
         new ManageSendResponse(_response, error, linkList, "Link")
-      );
-    }
-  );
-};
-
-export const ReorderLinkOnGroup = async (
-  _request: Request,
-  _response: Response
-) => {
-  const { userid: _userId } = _request.headers;
-  const reorderlinkRequest: ReorderLinkRequestDto = _request.body;
-
-  LinkService.recorderLink(
-    reorderlinkRequest,
-    Number(_userId),
-    (error: Error, reorderLinkResponseDto: ReorderLinkResponseDto) => {
-      return HttpResponseService.manageSendResponse(
-        new ManageSendResponse(_response, error, reorderLinkResponseDto, "Link")
       );
     }
   );

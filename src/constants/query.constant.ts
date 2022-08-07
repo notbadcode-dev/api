@@ -1,6 +1,6 @@
 import { UserLinkDto } from "../core/models/link.model";
 import { User } from "../core/models/user.model";
-import { UtilQueryService } from "../core/utils/util-string.service";
+import { UtilStringService } from "../core/utils/util-string.service";
 import { TinyIntTypes } from "../core/enums/global.enum";
 
 export const QUERY = {
@@ -9,7 +9,7 @@ export const QUERY = {
       userName: string,
       paraphrase: string
     ) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT * FROM users WHERE userName = '{0}' and paraphrase = '{1}'",
         [userName, paraphrase]
       );
@@ -18,13 +18,13 @@ export const QUERY = {
 
   USER: {
     SELECT_USER_WHERE_ID: (id: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT id, userName FROM users WHERE id = {0};",
         [id]
       );
     },
     SELECT_USER_WHERE_USERNAME: (userName: string) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT id, userName FROM users WHERE userName = '{0}';",
         [userName]
       );
@@ -32,10 +32,20 @@ export const QUERY = {
     CREATE_USER: (user: User) => {
       if (user.userName && user.paraphrase) {
         const today = new Date();
-        return UtilQueryService.formatQuery(
+        return UtilStringService.formatQuery(
           "INSERT INTO users (id, userName, paraphrase, createdAt, lastAccessedAt) " +
             "value(null, '{0}', '{1}', '{2}', null) RETURNING *;",
           [user.userName, user?.paraphrase, today]
+        );
+      }
+
+      return "";
+    },
+    UPDATE_USER: (user: User) => {
+      if (user.userName && user.paraphrase) {
+        return UtilStringService.formatQuery(
+          "UPDATE users SET userName = '{1}', paraphrase = '{2}' WHERE id = {0};",
+          [user.id, user?.userName, user?.paraphrase]
         );
       }
 
@@ -47,7 +57,7 @@ export const QUERY = {
     SELECT_GROUP_WHERE_USER_ID_ORDER_BY_GROUP_ORDER_AND_GROUP_NAME: (
       userId: number
     ) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT " +
           "groups.id AS id, " +
           "groups.groupOrder AS groupOrder, " +
@@ -68,7 +78,7 @@ export const QUERY = {
       groupId: number,
       active: TinyIntTypes
     ) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT count(*) " +
           "FROM usersLinks " +
           "LEFT OUTER JOIN links ON(links.id = usersLinks.id) " +
@@ -83,7 +93,7 @@ export const QUERY = {
     },
 
     ASSOCIATE_LINK_TO_GROUP: (groupId: number, linkId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "INSERT INTO groupsLinks (id, groupId, linkId, linkOrder) " +
           "VALUES (null, {0}, {1}, (SELECT COUNT(*) + 1 AS OrderLink FROM groupsLinks WHERE groupId = {0}));",
         [groupId, linkId]
@@ -91,7 +101,7 @@ export const QUERY = {
     },
 
     DEASSOCIATE_LINK_FROM_GROUP: (groupId: number, linkId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "DELETE FROM groupsLinks " +
           "WHERE groupId = {0} " +
           "AND linkId = {1};",
@@ -104,7 +114,7 @@ export const QUERY = {
       groupId: number,
       linkId: number
     ) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "UPDATE " +
           "groupsLinks set linkOrder={0} " +
           "WHERE groupId = {1} " +
@@ -116,7 +126,7 @@ export const QUERY = {
 
   LINK: {
     SELECT_LINKS_BY_USER_ID_WITHOUT_GROUP: (userId: number, active: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT " +
           "links.link AS id, " +
           "usersLinks.userId AS userId, " +
@@ -143,7 +153,7 @@ export const QUERY = {
     },
 
     SELECT_LINKS_BY_USER_ID: (userId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT " +
           "usersLinks.id AS id, " +
           "usersLinks.userId AS userId, " +
@@ -158,7 +168,7 @@ export const QUERY = {
           "usersLinks.createdAt AS createdAt, " +
           "usersLinks.lastModifiedAt AS lastModifiedAt " +
           "FROM usersLinks " +
-          "LEFT OUTER JOIN links ON(links.id = usersLinks.id) " +
+          "LEFT OUTER JOIN links ON(links.id = usersLinks.linkId) " +
           "LEFT OUTER JOIN groupsLinks ON(groupsLinks.linkId = usersLinks.linkId) " +
           "LEFT OUTER JOIN groups ON(groups.id = groupsLinks.groupId) " +
           "WHERE usersLinks.userId = {0} " +
@@ -168,7 +178,7 @@ export const QUERY = {
     },
 
     SELECT_LINKS_BY_USER_ID_GROUP_ID: (userId: number, groupId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT " +
           "usersLinks.id AS id, " +
           "usersLinks.userId AS userId, " +
@@ -195,7 +205,7 @@ export const QUERY = {
     },
 
     SELECT_LINK_BY_LINK_ID_AND_USER_ID: (userId: number, linkId: number) => {
-      return UtilQueryService.formatQuery(
+      const query: string = UtilStringService.formatQuery(
         "SELECT " +
           "usersLinks.id AS id, " +
           "usersLinks.userId AS userId, " +
@@ -211,7 +221,7 @@ export const QUERY = {
           "usersLinks.createdAt AS createdAt, " +
           "usersLinks.lastModifiedAt AS lastModifiedAt " +
           "FROM usersLinks " +
-          "LEFT OUTER JOIN links ON(links.id = usersLinks.id) " +
+          "LEFT OUTER JOIN links ON(links.id = usersLinks.linkId) " +
           "LEFT OUTER JOIN groupsLinks ON(groupsLinks.linkId = usersLinks.linkId) " +
           "LEFT OUTER JOIN groups ON(groups.id = groupsLinks.groupId) " +
           "WHERE usersLinks.userId = {0} " +
@@ -219,10 +229,12 @@ export const QUERY = {
           "ORDER BY GroupName ASC;",
         [userId, linkId]
       );
+
+      return query;
     },
 
     SELECT_LINK_BY_URL: (linkUrl: string) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "SELECT " +
           "links.id AS id, " +
           "links.link AS link " +
@@ -234,7 +246,7 @@ export const QUERY = {
 
     CREATE_LINK: (url: string, userId: number) => {
       const today = new Date();
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "INSERT INTO links (id, link, createdAt, lastModifiedAt, createdBy) " +
           "VALUES (null, '{0}', '{1}', '{2}', {3}) RETURNING *;",
         [url, today, today, userId]
@@ -243,7 +255,7 @@ export const QUERY = {
 
     UPDATE_LINK: (link: UserLinkDto, userId: number) => {
       const today = new Date();
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "UPDATE userslinks SET name = '{0}', color = '{1}', lastModifiedAt = '{2}', linkId = {3} WHERE id = {4};",
         [link.name, link.color, today, link.linkId, link.id]
       );
@@ -251,7 +263,7 @@ export const QUERY = {
 
     ASSOCIATE_LINK_TO_USER_LINK: (userLink: UserLinkDto) => {
       const today = new Date();
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "INSERT INTO usersLinks (id, name, color, userId, linkId, favorite, active, createdAt, lastModifiedAt) " +
           "VALUES (null, '{0}', '{1}', {2}, {3},  0, 1, '{4}', '{5}') RETURNING *;",
         [
@@ -270,7 +282,7 @@ export const QUERY = {
       userLink: number,
       userId: number
     ) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "UPDATE " +
           "usersLinks set active = {0} " +
           "WHERE id = {1} " +
@@ -280,7 +292,7 @@ export const QUERY = {
     },
 
     TOGGLE_FAVORITE: (userLinkId: number, userId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "UPDATE " +
           "usersLinks SET favorite = IF(favorite=1, 0, 1) " +
           "WHERE id = {0} " +
@@ -290,7 +302,7 @@ export const QUERY = {
     },
 
     TOGGLE_ACTIVE: (userLinkId: number, userId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "UPDATE " +
           "usersLinks SET active = IF(active=1, 0, 1) " +
           "WHERE id = {0} " +
@@ -300,7 +312,7 @@ export const QUERY = {
     },
 
     DELETE_LINK: (userLinkId: number, userId: number) => {
-      return UtilQueryService.formatQuery(
+      return UtilStringService.formatQuery(
         "DELETE FROM " +
           "usersLinks " +
           "WHERE id = {0} " +

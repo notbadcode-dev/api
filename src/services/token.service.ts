@@ -3,13 +3,13 @@ import "dotenv/config";
 
 import jwt from "jsonwebtoken";
 
-import { User, UserHelper } from "../models/user.model";
+import { User, UserHelper } from "../core/models/user.model";
 
 export class TokenService {
   /**
    * @description Generate token for user
    * @param  {string} userId
-   * @returns string
+   * @returns string - token for user
    */
   public static generateToken(user: User): any {
     const token = jwt.sign({ user }, process.env.JWT_SECRET ?? "", {
@@ -21,8 +21,7 @@ export class TokenService {
   /**
    * @description Veirify token for any user
    * @param  {string} token
-   * @param  {number} userId
-   * @returns boolean - true if token is valid
+   * @returns boolean - valid: true, invalid: false
    */
   public static verifyToken(token: string): any {
     return jwt.verify(
