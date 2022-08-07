@@ -1,16 +1,15 @@
-import { ERROR_MESSAGE } from "./../constants/error-message.constant";
+import { ERROR_MESSAGE } from "../../constants/error-message.constant";
 import {
   LinkHelper,
-  ReorderLinkRequestDto,
-  ReorderLinkResponseDto,
   UserLinkDto,
   UserLinkDtoHelper,
-} from "../core/models/link.model";
-import { QueryHelper } from "../core/models/query.model";
-import { LinkQuery } from "../queries/link.query";
-import { LINK } from "../constants/link.constant";
+} from "../../core/models/link.model";
+import { QueryHelper } from "../../core/models/query.model";
+import { LinkQuery } from "../../queries/link.query";
+import { LINK } from "../../constants/link.constant";
+import { LinkAuxiliarService } from "./link-auxiliar.service";
 
-export class LinkService {
+export class LinkService extends LinkAuxiliarService {
   /**
    * @description Get link list by userId
    * @param  {number} userId
@@ -42,40 +41,6 @@ export class LinkService {
         this.filteredLinkList(foundUserLinkList, active, favorite)
       )
     );
-  }
-
-  /**
-   * @description Verify arguments for getLinkListByUserId function
-   * @param  {number} userId
-   * @param  {number} active - 1: active, 0: inactive
-   * @param  {number} favorite - 1: favorite, 0: not favorite
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForGetLinkListByUserId(
-    userId: number,
-    active: number,
-    favorite: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    if (!active || typeof active !== "number" || active <= 0 || active > 1) {
-      valid = false;
-    }
-
-    if (
-      !favorite ||
-      typeof favorite !== "number" ||
-      favorite <= 0 ||
-      favorite > 1
-    ) {
-      valid = false;
-    }
-
-    return valid;
   }
 
   /**
@@ -114,29 +79,6 @@ export class LinkService {
   }
 
   /**
-   * @description Verify arguments for getLinkListByUserIdAndGroupId function
-   * @param  {number} userId
-   * @param  {number} groupId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForGetLinkListByUserIdAndGroupId(
-    userId: number,
-    groupId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    if (!groupId || typeof groupId !== "number" || groupId <= 0) {
-      valid = false;
-    }
-
-    return valid;
-  }
-
-  /**
    * @description Get Link by userId and linkId
    * @param  {number} userLinkId
    * @param  {number} userId
@@ -167,29 +109,6 @@ export class LinkService {
         UserLinkDtoHelper.mapToObjectList([foundUserLink])
       )
     );
-  }
-
-  /**
-   * @description Verify arguments for getLinkByUserLinkIdAndUserId function
-   * @param  {number} userLinkId
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForGetLinkByUserLinkIdAndUserId(
-    userLinkId: number,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
-      valid = false;
-    }
-
-    return valid;
   }
 
   /**
@@ -229,29 +148,6 @@ export class LinkService {
   }
 
   /**
-   * @description Verify arguments for create function
-   * @param  {UserLinkDto} link
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForCreate(
-    link: UserLinkDto,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!link || !link.link) {
-      valid = false;
-    }
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    return valid;
-  }
-
-  /**
    * @description Associate link to user
    * @param  {number} userId
    * @param  {number} linkId
@@ -259,7 +155,7 @@ export class LinkService {
    * @param  {CallableFunction} callback - success: no available, error: error message
    * @returns {any} - Callback function when exist error with error message
    */
-  private static async associatedLinkToUserLink(
+  public static async associatedLinkToUserLink(
     userId: number,
     linkId: number,
     link: UserLinkDto,
@@ -293,35 +189,6 @@ export class LinkService {
 
       return callback(null, resultAssociateLink.id);
     }
-  }
-
-  /**
-   * @description Verify arguments for associatedLinkToUserLink function
-   * @param  {number} userId
-   * @param  {number} linkId
-   * @param  {UserLinkDto} link
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForAssociatedLinkToUserLink(
-    userId: number,
-    linkId: number,
-    link: UserLinkDto
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    if (!linkId || typeof linkId !== "number" || linkId <= 0) {
-      valid = false;
-    }
-
-    if (!link || !link.link || !link.name || !link.groupId) {
-      valid = false;
-    }
-
-    return valid;
   }
 
   /**
@@ -367,29 +234,6 @@ export class LinkService {
   }
 
   /**
-   * @description Verify arguments for update function
-   * @param  {UserLinkDto} link
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForUpdate(
-    link: UserLinkDto,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    if (!link || !link.link || !link.id || !link.link) {
-      valid = false;
-    }
-
-    return valid;
-  }
-
-  /**
    * @description Delete Link
    * @param  {number} userLinkId
    * @param  {number} userId
@@ -423,29 +267,6 @@ export class LinkService {
     }
 
     return callback(null, resultDeleteLink);
-  }
-
-  /**
-   * @description Verify arguments for update function
-   * @param  {number} userLinkId
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForDelete(
-    userLinkId: number,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
-      valid = false;
-    }
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    return valid;
   }
 
   /**
@@ -485,29 +306,6 @@ export class LinkService {
   }
 
   /**
-   * @description Verify arguments for update function
-   * @param  {number} userLinkId
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForToggleFavorite(
-    userLinkId: number,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
-      valid = false;
-    }
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    return valid;
-  }
-
-  /**
    * @description Toggle Active
    * @param  {number} userLinkId
    * @param  {number} userId
@@ -541,58 +339,5 @@ export class LinkService {
     }
 
     return this.getLinkByUserLinkIdAndUserId(userLinkId, userId, callback);
-  }
-
-  /**
-   * @description Verify arguments for update function
-   * @param  {number} userLinkId
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForToggleActive(
-    userLinkId: number,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
-      valid = false;
-    }
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    return valid;
-  }
-
-  /**
-   * @description Filtered and return only active links
-   * @param  {UserLinkDto[]} linkList
-   * @param  {number} active - 1: active, 0: inactive
-   * @param  {number} favorite - 1: favorite, 0: not favorite
-   */
-  private static filteredLinkList(
-    linkList: UserLinkDto[],
-    active: number,
-    favorite: number
-  ): UserLinkDto[] {
-    let mappingLinkList = UserLinkDtoHelper.mapToObjectList(linkList);
-
-    if (!isNaN(active)) {
-      const isActive: boolean = active > 0 ? true : false;
-      mappingLinkList = mappingLinkList.filter(
-        (link) => link.active === isActive
-      );
-    }
-
-    if (!isNaN(favorite)) {
-      const isFavorite: boolean = favorite > 0 ? true : false;
-      mappingLinkList = mappingLinkList.filter(
-        (link) => link.favorite === isFavorite
-      );
-    }
-
-    return mappingLinkList;
   }
 }

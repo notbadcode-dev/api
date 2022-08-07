@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { ReorderLinkOnGroup } from "../controllers/linkGroup.controller";
+import { ReorderLinkOnGroup } from "../controllers/link-group.controller";
 
 const linkRoutes = {
   reorderLink: "/reorderLink",

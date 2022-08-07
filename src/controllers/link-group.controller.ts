@@ -6,7 +6,7 @@ import {
   ReorderLinkResponseDto,
 } from "../core/models/link.model";
 import { HttpResponseService } from "../core/services/http-response.service";
-import { LinkGroupService } from "../services/linkGroup.service";
+import { LinkGroupService } from "../services/link-group/link-group.service";
 
 export const ReorderLinkOnGroup = async (
   _request: Request,

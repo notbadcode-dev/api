@@ -22,7 +22,7 @@ export class UtilStringService {
   /**
    * @description Convert any data to string
    * @param  {number|string} data
-   * @returns string
+   * @returns {string}
    */
   public static convertToString(data: number | string | Date): string {
     if (typeof data === "string") {
@@ -43,7 +43,7 @@ export class UtilStringService {
   /**
    * @description Find if there are between characters the same
    * @param  {string} paraphrase
-   * @returns boolean - If true when there are between characters the same
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static betweenCharactersItsSameOnParaphrase(
     paraphrase: string
@@ -81,7 +81,8 @@ export class UtilStringService {
   /**
    * @description Detect if password contains more than two numbers in row
    * @param  {string} paraphrase
-   * @returns boolean - If true when there are between characters the same
+   * @param  {numer} maxNumber
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static paraphraseNotContainsNumberOfNumberInRow(
     paraphrase: string,
@@ -113,7 +114,8 @@ export class UtilStringService {
   /**
    * @description Find if there are between characters the same
    * @param  {string} paraphrase
-   * @returns boolean - If true when there are between characters the same
+   * @param  {number} maxNumber
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static paraphraseNotContainsNumberOfNumber(
     paraphrase: string,
@@ -143,7 +145,7 @@ export class UtilStringService {
   /**
    * @description Find if there are between characters the same
    * @param  {string} paraphrase
-   * @returns boolean - If true when there are between characters the same
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static paraphraseNotContainsNumbers(paraphrase: string): boolean {
     const paraphraseIsValid: boolean =
@@ -167,7 +169,7 @@ export class UtilStringService {
   /**
    * @description Detect if password not contains any lowercase character
    * @param  {string} paraphrase
-   * @returns boolean - true if password not contains any lowercase character
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static paraphraseNotContainsLowerCaseChar(
     paraphrase: string
@@ -178,7 +180,7 @@ export class UtilStringService {
   /**
    * @description Detect if password not contains any uppercase character
    * @param  {string} paraphrase
-   * @returns boolean - true if password not contains any uppercase character
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static praphraseNotContainsUpperChar(paraphrase: string): boolean {
     const paraphraseIsValid: boolean =
@@ -194,7 +196,7 @@ export class UtilStringService {
   /**
    * @description Detect if password not contains any special character
    * @param  {string} paraphrase
-   * @returns boolean - true if password not contains any special character
+   * @returns {boolean} - valid: true, invalid: false
    */
   public static paraphraseNotContainsSpecialChars(paraphrase: string) {
     const paraphraseIsValid: boolean =

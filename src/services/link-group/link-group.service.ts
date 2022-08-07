@@ -1,13 +1,14 @@
-import { ERROR_MESSAGE } from "../constants/error-message.constant";
+import { ERROR_MESSAGE } from "../../constants/error-message.constant";
 import {
   ReorderLinkRequestDto,
   ReorderLinkResponseDto,
   UserLinkDto,
-} from "../core/models/link.model";
-import { LinkQuery } from "../queries/link.query";
-import { LinkGroupQuery } from "../queries/linkGroup.query";
+} from "../../core/models/link.model";
+import { LinkQuery } from "../../queries/link.query";
+import { LinkGroupQuery } from "../../queries/link-group.query";
+import { LinkGroupAuxiliarService } from "./link-group-auxiliar.service";
 
-export class LinkGroupService {
+export class LinkGroupService extends LinkGroupAuxiliarService {
   /**
    * @description Reorder link on group
    * @param  {ReorderLinkRequestDto} reorderlinkRequest
@@ -92,62 +93,5 @@ export class LinkGroupService {
         foundLastLinkonPosition
       )
     );
-  }
-
-  /**
-   * @description Verify arguments for reorderLink function
-   * @param  {ReorderLinkRequestDto} reorderlinkRequest
-   * @param  {number} userId
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyArgumentForReorderLink(
-    reorderlinkRequest: ReorderLinkRequestDto,
-    userId: number
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!reorderlinkRequest) {
-      valid = false;
-    }
-
-    if (
-      reorderlinkRequest.newLinkIdOnPosition ===
-      reorderlinkRequest.lastLinkIdOnPosition
-    ) {
-      valid = false;
-    }
-
-    if (!userId || typeof userId !== "number" || userId <= 0) {
-      valid = false;
-    }
-
-    return valid;
-  }
-
-  /**
-   * @description Verify new order link on position and last order link on position for reorderLink function
-   * @param  {UserLinkDto} foundNewLinkonPosition
-   * @param  {UserLinkDto} foundLastLinkonPosition
-   * @returns {boolean} - true: valid, false: invalid
-   */
-  private static verifyNewAndLastLinkForReorderLink(
-    foundNewLinkonPosition: UserLinkDto,
-    foundLastLinkonPosition: UserLinkDto
-  ): boolean {
-    let valid: boolean = true;
-
-    if (!foundNewLinkonPosition || !foundLastLinkonPosition) {
-      valid = false;
-    }
-
-    if (foundNewLinkonPosition.linkId === foundLastLinkonPosition.linkId) {
-      valid = false;
-    }
-
-    if (foundNewLinkonPosition.groupId !== foundLastLinkonPosition.groupId) {
-      valid = false;
-    }
-
-    return valid;
   }
 }

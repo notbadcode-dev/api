@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ManageSendResponse } from "../core/models/http-response.model";
 
 import { User } from "../core/models/user.model";
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "../core/auth/auth.service";
 import { HttpResponseService } from "../core/services/http-response.service";
 
 /**

@@ -1,8 +1,8 @@
-import { QUERY } from "../constants/query.constant";
-import { connection } from "../database";
-import { User, VerifyUserToken } from "../core/models/user.model";
-import { TokenService } from "./token.service";
-import { UserQuery } from "../queries/user.query";
+import { QUERY } from "../../../constants/query.constant";
+import { connection } from "../../../database";
+import { User, VerifyUserToken } from "../../models/user.model";
+import { TokenService } from "../../token/token.service";
+import { UserQuery } from "../../../queries/user.query";
 
 export class AuthService {
   /**

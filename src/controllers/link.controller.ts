@@ -3,7 +3,7 @@ import { ManageSendResponse } from "../core/models/http-response.model";
 
 import { UserLinkDto } from "../core/models/link.model";
 import { HttpResponseService } from "../core/services/http-response.service";
-import { LinkService } from "../services/link.service";
+import { LinkService } from "../services/link/link.service";
 
 /**
  * @description Get link list by userId

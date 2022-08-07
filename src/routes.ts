@@ -3,7 +3,7 @@ import { Router } from "express";
 import AuthRoutes from "./routes/auth.routes";
 import UserRoutes from "./routes/user.routes";
 import LinkRoutes from "./routes/link.routes";
-import LinkGrouoRoutes from "./routes/linkGroup.routes";
+import LinkGrouoRoutes from "./routes/link-group.routes";
 
 const router = Router();
 

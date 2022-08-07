@@ -4,7 +4,7 @@ import { ManageSendResponse } from "../core/models/http-response.model";
 import { User } from "../core/models/user.model";
 import { HttpResponseService } from "../core/services/http-response.service";
 import { UserQuery } from "../queries/user.query";
-import { UserService } from "../services/user.service";
+import { UserService } from "../core/services/user/user.service";
 
 /**
  * @description Get any user by id
