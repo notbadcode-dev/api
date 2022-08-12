@@ -1,20 +1,17 @@
-import * as mariadb from "mariadb";
-
-const createPoolConfigBase: mariadb.PoolConfig = {
+export const connectionAuth = {
   host: "localhost",
   user: "notbadcode",
   password: "6900",
+  database: "auth",
   connectionLimit: 5,
   checkDuplicate: true,
 };
 
-const linkPoolConfig = JSON.parse(JSON.stringify(createPoolConfigBase));
-linkPoolConfig.database = "links";
-
-const authPoolConfig = JSON.parse(JSON.stringify(createPoolConfigBase));
-authPoolConfig.database = "auth";
-
-export const connection = {
-  links: mariadb.createPool(linkPoolConfig),
-  auth: mariadb.createPool(authPoolConfig),
+export const connectionLinks = {
+  host: "localhost",
+  user: "notbadcode",
+  password: "6900",
+  database: "auth",
+  connectionLimit: 5,
+  checkDuplicate: true,
 };

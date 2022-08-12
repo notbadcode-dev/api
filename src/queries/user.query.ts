@@ -2,7 +2,9 @@ import { ERROR_MESSAGE } from "../constants/error-message.constant";
 import { QUERY } from "../constants/query.constant";
 import { UpdateQueryResult } from "../core/models/query.model";
 import { User } from "../core/models/user.model";
-import { connection } from "../database";
+import { connectionAuth } from "../database";
+
+import * as mariadb from "mariadb";
 
 export class UserQuery {
   /**
@@ -15,7 +17,8 @@ export class UserQuery {
     userId: number,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.auth.getConnection();
+    const connection = mariadb.createPool(connectionAuth);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: User = await conn
@@ -44,7 +47,8 @@ export class UserQuery {
     userName: string,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.auth.getConnection();
+    const connection = mariadb.createPool(connectionAuth);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: User = await conn
@@ -73,7 +77,8 @@ export class UserQuery {
     newUser: User,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.auth.getConnection();
+    const connection = mariadb.createPool(connectionAuth);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: User | void = await conn
@@ -104,7 +109,8 @@ export class UserQuery {
     updateUser: User,
     callback: CallableFunction
   ): Promise<number | void> {
-    const conn = await connection.auth.getConnection();
+    const connection = mariadb.createPool(connectionAuth);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: number = await conn

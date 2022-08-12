@@ -6,7 +6,7 @@ import swaggerUi from "swagger-ui-express";
 
 import { verifyToken } from "./middlewares/auth.middleware";
 
-import AppRoutes from "./routes";
+import AppRoutes from "./routes/index.routes";
 import swaggerDocument from "./swagger";
 
 // Create Express server
@@ -35,6 +35,10 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, swaggerOptions)
 );
+
+app.get("/api/notbadcode", (req, res) => {
+  res.status(200).send("NotBadCode API v2.0");
+});
 
 app.use(apiBasePath, AppRoutes);
 

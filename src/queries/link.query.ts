@@ -2,7 +2,9 @@ import { ERROR_MESSAGE } from "../constants/error-message.constant";
 import { QUERY } from "../constants/query.constant";
 import { UserLinkDto } from "../core/models/link.model";
 import { UpdateQueryResult } from "../core/models/query.model";
-import { connection } from "../database";
+import { connectionLinks } from "../database";
+
+import * as mariadb from "mariadb";
 
 export class LinkQuery {
   /**
@@ -15,7 +17,8 @@ export class LinkQuery {
     userId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto[] | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto[] | any = await conn.query(
@@ -43,7 +46,8 @@ export class LinkQuery {
     groupId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto[] | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto[] | any = await conn.query(
@@ -71,7 +75,8 @@ export class LinkQuery {
     linkId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -98,7 +103,8 @@ export class LinkQuery {
     linkUrl: string,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -127,7 +133,8 @@ export class LinkQuery {
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -154,7 +161,8 @@ export class LinkQuery {
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -183,7 +191,8 @@ export class LinkQuery {
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: number | any = await conn
@@ -221,7 +230,8 @@ export class LinkQuery {
     userLinkId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -252,7 +262,8 @@ export class LinkQuery {
     userLinkId: number,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: number | any = await conn
@@ -290,7 +301,8 @@ export class LinkQuery {
     userLinkId: number,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: number | any = await conn

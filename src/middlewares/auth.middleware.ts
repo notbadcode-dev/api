@@ -13,8 +13,12 @@ export const verifyToken = async (
 ) => {
   const token = request.headers.authorization;
   const excludedUrlList: string[] = [
+    "/api/notbadcode",
+    "/api/notbadcode/",
     "/api/notbadcode/auth/sign",
     "/api/notbadcode/user/create",
+    "/api/notbadcode/docs",
+    "/api/notbadcode/docs/",
   ];
 
   if (!excludedUrlList.includes(request.originalUrl)) {

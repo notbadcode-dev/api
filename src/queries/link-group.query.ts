@@ -1,7 +1,9 @@
 import { ERROR_MESSAGE } from "../constants/error-message.constant";
 import { QUERY } from "../constants/query.constant";
 import { UpdateQueryResult } from "../core/models/query.model";
-import { connection } from "../database";
+import { connectionLinks } from "../database";
+
+import * as mariadb from "mariadb";
 
 export class LinkGroupQuery {
   /**
@@ -18,7 +20,8 @@ export class LinkGroupQuery {
     lastPosition: number,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.links.getConnection();
+    const connection = mariadb.createPool(connectionLinks);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: number | any = await conn

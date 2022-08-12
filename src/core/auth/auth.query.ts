@@ -3,9 +3,11 @@ import {
   ERROR_MESSAGE_AUTH,
 } from "../../constants/error-message.constant";
 import { QUERY } from "../../constants/query.constant";
-import { connection } from "../../database";
+import { connectionAuth } from "../../database";
 import { UpdateQueryResult } from "../models/query.model";
 import { User } from "../models/user.model";
+
+import * as mariadb from "mariadb";
 
 export class AuthQuery {
   /**
@@ -20,7 +22,8 @@ export class AuthQuery {
     paraphrase: string,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.auth.getConnection();
+    const connection = mariadb.createPool(connectionAuth);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: User = await conn
@@ -57,7 +60,8 @@ export class AuthQuery {
     updateUserId: number,
     callback: CallableFunction
   ): Promise<number | void> {
-    const conn = await connection.auth.getConnection();
+    const connection = mariadb.createPool(connectionAuth);
+    const conn = await connection.getConnection();
 
     try {
       const resultQuery: number = await conn
