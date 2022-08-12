@@ -15,7 +15,7 @@ export class UserQuery {
     userId: number,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.getConnection();
+    const conn = await connection.auth.getConnection();
 
     try {
       const resultQuery: User = await conn
@@ -44,7 +44,7 @@ export class UserQuery {
     userName: string,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.getConnection();
+    const conn = await connection.auth.getConnection();
 
     try {
       const resultQuery: User = await conn
@@ -73,7 +73,7 @@ export class UserQuery {
     newUser: User,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.getConnection();
+    const conn = await connection.auth.getConnection();
 
     try {
       const resultQuery: User | void = await conn
@@ -104,7 +104,7 @@ export class UserQuery {
     updateUser: User,
     callback: CallableFunction
   ): Promise<number | void> {
-    const conn = await connection.getConnection();
+    const conn = await connection.auth.getConnection();
 
     try {
       const resultQuery: number = await conn

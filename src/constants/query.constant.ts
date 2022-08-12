@@ -14,6 +14,18 @@ export const QUERY = {
         [userName, paraphrase]
       );
     },
+
+    UPDATE_USER_WITH_LAST_ACCESS: (userId: number) => {
+      if (userId) {
+        const today: Date = new Date();
+        return UtilStringService.formatQuery(
+          "UPDATE users SET lastAccessedAt = '{1}' WHERE id = {0};",
+          [userId, today]
+        );
+      }
+
+      return "";
+    },
   },
 
   USER: {

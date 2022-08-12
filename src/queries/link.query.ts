@@ -15,7 +15,7 @@ export class LinkQuery {
     userId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto[] | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto[] | any = await conn.query(
@@ -43,7 +43,7 @@ export class LinkQuery {
     groupId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto[] | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto[] | any = await conn.query(
@@ -71,7 +71,7 @@ export class LinkQuery {
     linkId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -98,7 +98,7 @@ export class LinkQuery {
     linkUrl: string,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -127,7 +127,7 @@ export class LinkQuery {
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -154,7 +154,7 @@ export class LinkQuery {
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -183,7 +183,7 @@ export class LinkQuery {
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: number | any = await conn
@@ -221,7 +221,7 @@ export class LinkQuery {
     userLinkId: number,
     callback: CallableFunction
   ): Promise<UserLinkDto | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: UserLinkDto | any = await conn
@@ -252,7 +252,7 @@ export class LinkQuery {
     userLinkId: number,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: number | any = await conn
@@ -290,7 +290,7 @@ export class LinkQuery {
     userLinkId: number,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: number | any = await conn

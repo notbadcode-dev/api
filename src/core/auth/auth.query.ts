@@ -1,6 +1,10 @@
-import { ERROR_MESSAGE_AUTH } from "../../constants/error-message.constant";
+import {
+  ERROR_MESSAGE,
+  ERROR_MESSAGE_AUTH,
+} from "../../constants/error-message.constant";
 import { QUERY } from "../../constants/query.constant";
 import { connection } from "../../database";
+import { UpdateQueryResult } from "../models/query.model";
 import { User } from "../models/user.model";
 
 export class AuthQuery {
@@ -16,7 +20,7 @@ export class AuthQuery {
     paraphrase: string,
     callback: CallableFunction
   ): Promise<User | void> {
-    const conn = await connection.getConnection();
+    const conn = await connection.auth.getConnection();
 
     try {
       const resultQuery: User = await conn
@@ -38,6 +42,38 @@ export class AuthQuery {
       }
     } catch (err) {
       callback(ERROR_MESSAGE_AUTH.ERROR_ON_SEARCH_USERNAME_OR_PASSWORD);
+    } finally {
+      conn.end();
+    }
+  }
+
+  /**
+   * @description Execute query for update last access user date
+   * @param  {number} updateUserId
+   * @param  {CallableFunction} callback
+   * @returns {any} - Modified number users or error message on callback function
+   */
+  public static async updateLastAccessUserQuery(
+    updateUserId: number,
+    callback: CallableFunction
+  ): Promise<number | void> {
+    const conn = await connection.auth.getConnection();
+
+    try {
+      const resultQuery: number = await conn
+        .query(QUERY.AUTH.UPDATE_USER_WITH_LAST_ACCESS(updateUserId))
+        .then((result: UpdateQueryResult) => {
+          const affectedRows: number = result?.affectedRows ?? 0;
+
+          if (affectedRows >= 1) {
+            return affectedRows;
+          }
+          return 0;
+        });
+
+      return resultQuery;
+    } catch (err) {
+      callback(ERROR_MESSAGE.FAILED_UPDATE_ANY("user"));
     } finally {
       conn.end();
     }

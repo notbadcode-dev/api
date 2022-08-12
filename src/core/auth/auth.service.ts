@@ -2,7 +2,10 @@ import { User, VerifyUserToken } from "../models/user.model";
 import { TokenService } from "../token/token.service";
 import { UserQuery } from "../../queries/user.query";
 import { AuthQuery } from "./auth.query";
-import { ERROR_MESSAGE_AUTH } from "../../constants/error-message.constant";
+import {
+  ERROR_MESSAGE,
+  ERROR_MESSAGE_AUTH,
+} from "../../constants/error-message.constant";
 import { AuthAuxiliarService } from "./auth-auxiliar.service";
 
 export class AuthService extends AuthAuxiliarService {
@@ -30,6 +33,22 @@ export class AuthService extends AuthAuxiliarService {
 
     if (!resultTokenQuery) {
       return callback(ERROR_MESSAGE_AUTH.ERROR_ON_SEARCH_USERNAME_OR_PASSWORD);
+    }
+
+    const resultUserQuery = await UserQuery.getUserByUserNameQuery(
+      userName,
+      callback
+    );
+
+    if (resultUserQuery) {
+      const resultUpdateUser = await AuthQuery.updateLastAccessUserQuery(
+        resultUserQuery.id,
+        callback
+      );
+
+      if (!resultUpdateUser) {
+        return callback(ERROR_MESSAGE.FAILED_UPDATE_ANY("User"));
+      }
     }
 
     return callback(null, TokenService.generateToken(resultTokenQuery));

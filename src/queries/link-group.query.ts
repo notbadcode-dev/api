@@ -18,7 +18,7 @@ export class LinkGroupQuery {
     lastPosition: number,
     callback: CallableFunction
   ): Promise<number | any> {
-    const conn = await connection.getConnection();
+    const conn = await connection.links.getConnection();
 
     try {
       const resultQuery: number | any = await conn
