@@ -26,9 +26,8 @@ export class AuthQuery {
             paraphrase
           )
         )
-        .then((result: User) => {
-          return result;
-        });
+        .then((result: any) => result[0])
+        .then((result: User) => result);
 
       if (!resultQuery) {
         return callback(null, null);

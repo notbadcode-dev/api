@@ -3,7 +3,6 @@ import { ManageSendResponse } from "../core/models/http-response.model";
 
 import { User } from "../core/models/user.model";
 import { HttpResponseService } from "../core/services/http-response.service";
-import { UserQuery } from "../queries/user.query";
 import { UserService } from "../core/services/user/user.service";
 
 /**
@@ -15,7 +14,7 @@ import { UserService } from "../core/services/user/user.service";
 export const GetUserById = async (_request: Request, _response: Response) => {
   const { id: _id } = _request.params;
 
-  UserQuery.getUserByIdQuery(Number(_id), (error: Error, user: User) => {
+  UserService.getById(Number(_id), (error: Error, user: User) => {
     return HttpResponseService.manageSendResponse(
       new ManageSendResponse(_response, error, user, "User")
     );

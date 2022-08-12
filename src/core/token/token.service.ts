@@ -13,9 +13,13 @@ export class TokenService {
    */
   public static generateToken(user: User): any {
     if (user && user.id) {
-      const token = jwt.sign({ user }, process.env.JWT_SECRET ?? "", {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      });
+      const token = jwt.sign(
+        { id: user.id, userName: user.userName },
+        process.env.JWT_SECRET ?? "",
+        {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        }
+      );
       return token;
     }
 
@@ -36,7 +40,7 @@ export class TokenService {
           return {
             valid: !err,
             user: decode
-              ? UserHelper.mapToObject(decode?.user[0])
+              ? UserHelper.mapToObject(decode)
               : UserHelper.defaultObject(),
             token: token,
             verifyError: err ?? null,

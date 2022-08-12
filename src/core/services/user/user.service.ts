@@ -3,11 +3,33 @@ import {
   ERROR_MESSAGE_USER,
 } from "../../../constants/error-message.constant";
 
-import { User } from "../../models/user.model";
+import { User, UserHelper } from "../../models/user.model";
 import { UserQuery } from "../../../queries/user.query";
 import { UserAuxiliarService } from "./user-auxiliar.service";
 
 export class UserService extends UserAuxiliarService {
+  /**
+   * @description Create user
+   * @param  {User} newUser
+   * @param  {CallableFunction} callback - success: Created user, error: error message
+   * @returns {any} - Callback function for get response with created user or error message
+   */
+  public static async getById(
+    userId: number,
+    callback: CallableFunction
+  ): Promise<void> {
+    const foundUser: User | void = await UserQuery.getUserByIdQuery(
+      userId,
+      callback
+    );
+
+    if (!foundUser) {
+      return callback(ERROR_MESSAGE.NOT_FOUND_ANY("User"));
+    }
+
+    return callback(null, foundUser);
+  }
+
   /**
    * @description Create user
    * @param  {User} newUser

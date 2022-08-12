@@ -19,7 +19,7 @@ export const QUERY = {
   USER: {
     SELECT_USER_WHERE_ID: (id: number) => {
       return UtilStringService.formatQuery(
-        "SELECT id, userName FROM users WHERE id = {0};",
+        "SELECT * FROM users WHERE id = {0};",
         [id]
       );
     },
