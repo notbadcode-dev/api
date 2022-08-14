@@ -181,13 +181,11 @@ export class LinkQuery {
 
   /**
    * @description Execute query for update link
-   * @param  {number} userId
    * @param  {UserLinkDto} link
    * @param  {CallableFunction} callback
    * @returns {any} - Modified number links or error message on callback function
    */
   public static async updateLink(
-    userId: number,
     link: UserLinkDto,
     callback: CallableFunction
   ): Promise<number | any> {
@@ -196,7 +194,7 @@ export class LinkQuery {
 
     try {
       const resultQuery: number | any = await conn
-        .query(QUERY.LINK.UPDATE_LINK(link, userId))
+        .query(QUERY.LINK.UPDATE_LINK(link))
         .then((result: UpdateQueryResult) => {
           const affectedRows: number = result?.affectedRows ?? 0;
 

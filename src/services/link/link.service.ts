@@ -226,7 +226,7 @@ export class LinkService extends LinkAuxiliarService {
       }
     }
 
-    const resultUpdateLink = await LinkQuery.updateLink(userId, link, callback);
+    const resultUpdateLink = await LinkQuery.updateLink(link, callback);
 
     if (resultUpdateLink) {
       return callback(null, link.id);
