@@ -2,9 +2,8 @@ import {
   ERROR_MESSAGE,
   ERROR_MESSAGE_USER,
 } from "../../../constants/error-message.constant";
-
-import { User, UserHelper } from "../../models/user.model";
 import { UserQuery } from "../../../queries/user.query";
+import { User } from "../../models/user.model";
 import { UserAuxiliarService } from "./user-auxiliar.service";
 
 export class UserService extends UserAuxiliarService {
@@ -105,7 +104,7 @@ export class UserService extends UserAuxiliarService {
       return callback(passwordIncorrect);
     }
 
-    let userQueryResult: number | void = await UserQuery.UpdateUserQuery(
+    const userQueryResult: number | void = await UserQuery.UpdateUserQuery(
       updateUser,
       callback
     );

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ManageSendResponse } from "../core/models/http-response.model";
 
+import { ManageSendResponse } from "../core/models/http-response.model";
 import { User } from "../core/models/user.model";
 import { HttpResponseService } from "../core/services/http-response.service";
 import { UserService } from "../core/services/user/user.service";

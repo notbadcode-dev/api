@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ManageSendResponse } from "../core/models/http-response.model";
 
+import { ManageSendResponse } from "../core/models/http-response.model";
 import { UserLinkDto } from "../core/models/link.model";
 import { HttpResponseService } from "../core/services/http-response.service";
 import { LinkService } from "../services/link/link.service";
@@ -69,7 +69,6 @@ export const GetLinkByUserLinkId = async (
 ) => {
   const { userid: _userId } = _request.headers;
   const { userLinkId: _userLinkId } = _request.params;
-  const { active: _active } = _request.query;
 
   LinkService.getLinkByUserLinkIdAndUserId(
     Number(_userLinkId),

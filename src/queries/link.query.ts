@@ -1,10 +1,10 @@
+import * as mariadb from "mariadb";
+
 import { ERROR_MESSAGE } from "../constants/error-message.constant";
 import { QUERY } from "../constants/query.constant";
 import { UserLinkDto } from "../core/models/link.model";
 import { UpdateQueryResult } from "../core/models/query.model";
 import { connectionLinks } from "../database";
-
-import * as mariadb from "mariadb";
 
 export class LinkQuery {
   /**

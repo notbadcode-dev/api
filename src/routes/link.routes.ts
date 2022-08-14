@@ -1,14 +1,14 @@
 import { Router } from "express";
 
 import {
+  Create,
+  DeleteLink,
+  GetLinkByUserLinkId,
   GetLinkListByUserId,
   GetLinkListByUserIdAndGroupId,
-  GetLinkByUserLinkId,
-  Create,
-  Update,
-  ToggleFavorite,
   ToggleActive,
-  DeleteLink,
+  ToggleFavorite,
+  Update,
 } from "../controllers/link.controller";
 
 const linkRoutes = {

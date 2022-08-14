@@ -1,4 +1,5 @@
 import { ERROR_MESSAGE } from "../../constants/error-message.constant";
+import { LINK } from "../../constants/link.constant";
 import {
   LinkHelper,
   UserLinkDto,
@@ -6,7 +7,6 @@ import {
 } from "../../core/models/link.model";
 import { QueryHelper } from "../../core/models/query.model";
 import { LinkQuery } from "../../queries/link.query";
-import { LINK } from "../../constants/link.constant";
 import { LinkAuxiliarService } from "./link-auxiliar.service";
 
 export class LinkService extends LinkAuxiliarService {

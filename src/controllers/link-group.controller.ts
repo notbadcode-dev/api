@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ManageSendResponse } from "../core/models/http-response.model";
 
+import { ManageSendResponse } from "../core/models/http-response.model";
 import {
   ReorderLinkRequestDto,
   ReorderLinkResponseDto,

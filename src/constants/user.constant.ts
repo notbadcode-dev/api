@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 export const USER = {
   NUMBER_CONTROL_REPEAT_SAME_CHAR_ON_USERNAME: 8,
   ALLOWED_CHARACTERS_PASSWORD: 8,

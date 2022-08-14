@@ -1,7 +1,6 @@
 import request from "supertest";
-import app from "../src/app";
 
-import { connectionAuth, connectionLinks } from "../src/database";
+import app from "../src/app";
 
 const _request = request(app);
 

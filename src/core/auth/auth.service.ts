@@ -1,11 +1,11 @@
-import { User, VerifyUserToken } from "../models/user.model";
-import { TokenService } from "../token/token.service";
-import { UserQuery } from "../../queries/user.query";
-import { AuthQuery } from "./auth.query";
 import {
   ERROR_MESSAGE,
   ERROR_MESSAGE_AUTH,
 } from "../../constants/error-message.constant";
+import { UserQuery } from "../../queries/user.query";
+import { User, VerifyUserToken } from "../models/user.model";
+import { TokenService } from "../token/token.service";
+import { AuthQuery } from "./auth.query";
 import { AuthAuxiliarService } from "./auth-auxiliar.service";
 
 export class AuthService extends AuthAuxiliarService {

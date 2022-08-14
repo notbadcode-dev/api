@@ -1,8 +1,8 @@
 import "dotenv/config";
 
 import { Request, Response } from "express";
-import { REQUEST_HEADER } from "../constants/http-request.constant";
 
+import { REQUEST_HEADER } from "../constants/http-request.constant";
 import { HttpResponseService } from "../core/services/http-response.service";
 import { TokenService } from "../core/token/token.service";
 

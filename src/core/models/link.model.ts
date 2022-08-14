@@ -1,5 +1,4 @@
 import { TinyInt } from "../enums/global.enum";
-import { UserLink } from "./user-link.model";
 
 export class Link {
   constructor(

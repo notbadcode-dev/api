@@ -1,10 +1,10 @@
+import * as mariadb from "mariadb";
+
 import { ERROR_MESSAGE } from "../constants/error-message.constant";
 import { QUERY } from "../constants/query.constant";
 import { UpdateQueryResult } from "../core/models/query.model";
 import { User } from "../core/models/user.model";
 import { connectionAuth } from "../database";
-
-import * as mariadb from "mariadb";
 
 export class UserQuery {
   /**

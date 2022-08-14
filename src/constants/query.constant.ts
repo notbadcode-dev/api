@@ -1,7 +1,7 @@
+import { TinyIntTypes } from "../core/enums/global.enum";
 import { UserLinkDto } from "../core/models/link.model";
 import { User } from "../core/models/user.model";
 import { UtilStringService } from "../core/utils/util-string.service";
-import { TinyIntTypes } from "../core/enums/global.enum";
 
 export const QUERY = {
   AUTH: {
@@ -265,7 +265,7 @@ export const QUERY = {
       );
     },
 
-    UPDATE_LINK: (link: UserLinkDto, userId: number) => {
+    UPDATE_LINK: (link: UserLinkDto) => {
       const today = new Date();
       return UtilStringService.formatQuery(
         "UPDATE userslinks SET name = '{0}', color = '{1}', lastModifiedAt = '{2}', linkId = {3} WHERE id = {4};",

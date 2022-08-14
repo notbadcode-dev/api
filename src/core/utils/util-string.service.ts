@@ -55,14 +55,14 @@ export class UtilStringService {
       return false;
     }
 
-    const existNumberOnUserName: boolean =
+    const existNumberOnUserName =
       !this.paraphraseNotContainsNumbers(paraphrase);
     if (existNumberOnUserName) {
       const characters: string[] = paraphrase.split("");
 
       let repeatChar = "";
       let repeatNumber = 0;
-      for (let char of characters) {
+      for (const char of characters) {
         repeatChar = char;
 
         if (repeatChar === char) {
@@ -97,10 +97,8 @@ export class UtilStringService {
 
     const characters: string[] = paraphrase.split("");
 
-    let repeatChar = "";
     let numberCounter = 0;
-    for (var char of characters) {
-      repeatChar = char;
+    for (const char of characters) {
       if (char.match(/[0-9]/g)) {
         numberCounter++;
       } else {
@@ -133,7 +131,7 @@ export class UtilStringService {
     const characters: string[] = paraphrase.split("");
 
     let numberCounter = 0;
-    for (var char of characters) {
+    for (const char of characters) {
       if (char.match(/[0-9]/g)) {
         numberCounter++;
       }

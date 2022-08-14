@@ -5,7 +5,6 @@ import path from "path";
 import swaggerUi from "swagger-ui-express";
 
 import { verifyToken } from "./middlewares/auth.middleware";
-
 import AppRoutes from "./routes/index.routes";
 import swaggerDocument from "./swagger";
 
