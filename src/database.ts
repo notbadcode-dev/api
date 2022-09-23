@@ -11,7 +11,7 @@ export const connectionLinks = {
   host: "localhost",
   user: "notbadcode",
   password: "6900",
-  database: "auth",
+  database: "links",
   connectionLimit: 5,
   checkDuplicate: true,
 };
