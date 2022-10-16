@@ -103,7 +103,7 @@ export class ReorderLinkRequestDto {
 
 export class ReorderLinkResponseDto {
   constructor(
-    public newLinkonPosition: UserLinkDto,
+    public newLinkOnPosition: UserLinkDto,
     public lastLinkIdOnPosition: UserLinkDto
   ) {}
 }

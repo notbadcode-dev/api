@@ -1,6 +1,8 @@
 import "dotenv/config";
 
+import cors from "cors";
 import express from "express";
+import { request } from "http";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 
@@ -24,6 +26,18 @@ app.use(verifyToken);
 app.use(
   express.static(path.join(__dirname, "../public"), { maxAge: 31557600000 })
 );
+
+// CORS configuration
+const corsOptions = {
+  origin: "http://localhost:3200",
+};
+
+app.use(cors(corsOptions));
+
+app.options("*", (req, res) => {
+  res.status(200);
+});
+
 // Swagger
 const swaggerOptions = {
   explorer: true,

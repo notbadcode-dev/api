@@ -2,16 +2,34 @@ import {
   ERROR_MESSAGE,
   ERROR_MESSAGE_USER,
 } from "../../../constants/error-message.constant";
+import { TokenService } from "../../../core/token/token.service";
 import { UserQuery } from "../../../queries/user.query";
 import { User } from "../../models/user.model";
 import { UserAuxiliarService } from "./user-auxiliar.service";
 
 export class UserService extends UserAuxiliarService {
   /**
-   * @description Create user
-   * @param  {User} newUser
-   * @param  {CallableFunction} callback - success: Created user, error: error message
-   * @returns {any} - Callback function for get response with created user or error message
+   * @description Get User
+   * @param  {string} token
+   * @param  {CallableFunction} callback
+   * @returns {any} - Callback function for get response with user or error message
+   */
+  public static async get(
+    token: string,
+    callback: CallableFunction
+  ): Promise<void> {
+    if (!token || !token.length) {
+      return callback(ERROR_MESSAGE.NOT_FOUND_ANY("User"));
+    }
+
+    return callback(null, TokenService.verifyToken(token).user);
+  }
+
+  /**
+   * @description Create user by id
+   * @param  {number} userId
+   * @param  {CallableFunction} callback
+   * @returns {any} - Callback function for get response with user or error message
    */
   public static async getById(
     userId: number,

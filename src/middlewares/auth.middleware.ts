@@ -21,6 +21,10 @@ export const verifyToken = async (
     "/api/notbadcode/docs/",
   ];
 
+  if (request.method === "OPTIONS") {
+    next();
+  }
+
   if (!excludedUrlList.includes(request.originalUrl)) {
     if (!token) {
       return HttpResponseService.sendUnauthrizedResponse(response);
