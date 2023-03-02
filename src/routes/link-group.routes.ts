@@ -1,12 +1,14 @@
 import { Router } from "express";
 
-import { ReorderLinkOnGroup } from "../controllers/link-group.controller";
-
-const linkRoutes = {
-  reorderLink: "/reorderLink",
-};
+import { RouteConstants } from "../constants/route.constant";
+import { LinkGroupController } from "../controllers/link-group.controller";
 
 const routes = Router();
-routes.post(linkRoutes.reorderLink, ReorderLinkOnGroup);
+const linkGroupController: LinkGroupController = new LinkGroupController();
+
+routes.post(
+  RouteConstants.linkGroup.reorderLink,
+  linkGroupController.ReorderLinkOnGroup
+);
 
 export default routes;

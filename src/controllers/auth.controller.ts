@@ -1,51 +1,75 @@
 import { Request, Response } from "express";
 
+import { EntityNameConstant } from "../constants/entity.constant";
 import { AuthService } from "../core/auth/auth.service";
 import { ManageSendResponse } from "../core/models/http-response.model";
 import { User } from "../core/models/user.model";
 import { HttpResponseService } from "../core/services/http-response.service";
 
-/**
- * @description Sign in with userName and paraphrase
- * @param  {Request} _request
- * @param  {Response} _response
- * @returns Response - Token
- */
-export const SignIn = async (_request: Request, _response: Response) => {
-  const { userName: _userName, paraphrase: _paraphrase } = _request.body;
-  AuthService.signIn(_userName, _paraphrase, (error: Error, user: User) => {
-    return HttpResponseService.manageSendResponse(
-      new ManageSendResponse(_response, error, user, "User")
-    );
-  });
-};
+export class AuthController {
+  httpResponseService!: HttpResponseService;
+  authService!: AuthService;
 
-/**
- * @description Verify token for any user for keep session
- * @param  {Request} _request
- * @param  {Response} _response
- * @returns Response - Token
- */
-export const KeepSession = async (_request: Request, _response: Response) => {
-  const { id: _id } = _request.params;
-  const token = _request.headers.authorization;
+  constructor() {
+    this.httpResponseService = new HttpResponseService();
+    this.authService = new AuthService();
+  }
 
-  AuthService.keepSession(
-    Number(_id),
-    token as string,
-    (error: Error, verifyToken: boolean) => {
-      if (error) {
-        return HttpResponseService.sendInternalServerErrorResponse(
-          _response,
-          error
+  /**
+   * @description Sign in with userName and paraphrase
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - Token
+   */
+  SignIn = async (_request: Request, _response: Response) => {
+    const { userName: _userName, paraphrase: _paraphrase } = _request.body;
+    this.authService.signIn(
+      _userName,
+      _paraphrase,
+      (error: Error, user: User) => {
+        return this.httpResponseService.manageSendResponse(
+          new ManageSendResponse(
+            _response,
+            error,
+            user,
+            EntityNameConstant.user
+          )
         );
       }
+    );
+  };
 
-      if (!verifyToken) {
-        return HttpResponseService.sendForbiddenResponse(_response);
+  /**
+   * @description Verify token for any user for keep session
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - Token
+   */
+  KeepSession = async (_request: Request, _response: Response) => {
+    const { id: _id } = _request.params;
+    const token = _request.headers.authorization;
+
+    this.authService.keepSession(
+      Number(_id),
+      token as string,
+      (error: Error, verifyToken: boolean) => {
+        if (error) {
+          return this.httpResponseService.sendInternalServerErrorResponse(
+            _response,
+            error
+          );
+        }
+
+        if (!verifyToken) {
+          return this.httpResponseService.sendForbiddenResponse(_response);
+        }
+
+        return this.httpResponseService.sendSuccessResponse(
+          _response,
+          "",
+          verifyToken
+        );
       }
-
-      return HttpResponseService.sendSuccesResponse(_response, "", verifyToken);
-    }
-  );
-};
+    );
+  };
+}

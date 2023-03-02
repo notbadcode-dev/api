@@ -3,8 +3,9 @@ import * as mariadb from "mariadb";
 import { ERROR_MESSAGE } from "../constants/error-message.constant";
 import { QUERY } from "../constants/query.constant";
 import { UpdateQueryResult } from "../core/models/query.model";
-import { User } from "../core/models/user.model";
-import { connectionAuth } from "../database";
+import { User, UserHelper } from "../core/models/user.model";
+import { AuthDataSource, connectionAuth } from "../database";
+import { UserEntity } from "../entity/user.entity";
 
 export class UserQuery {
   /**
@@ -20,21 +21,37 @@ export class UserQuery {
     const connection = mariadb.createPool(connectionAuth);
     const conn = await connection.getConnection();
 
-    try {
-      const resultQuery: User = await conn
-        .query(QUERY.USER.SELECT_USER_WHERE_ID(userId))
-        .then((result: any) => {
-          return result[0];
-        });
+    const userRepository = AuthDataSource.getRepository(UserEntity);
 
-      if (resultQuery) {
-        return resultQuery;
-      }
-    } catch (err) {
+    const user = await userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user === null) {
       callback(ERROR_MESSAGE.FAILED_GET_ANY("user"));
-    } finally {
-      conn.end();
     }
+
+    if (user !== null) {
+      return UserHelper.mapToObject(user);
+    }
+
+    // try {
+    //   const resultQuery: User = await conn
+    //     .query(QUERY.USER.SELECT_USER_WHERE_ID(userId))
+    //     .then((result: any) => {
+    //       return result[0];
+    //     });
+
+    //   if (resultQuery) {
+    //     return resultQuery;
+    //   }
+    // } catch (err) {
+    //   callback(ERROR_MESSAGE.FAILED_GET_ANY("user"));
+    // } finally {
+    //   conn.end();
+    // }
   }
 
   /**

@@ -8,20 +8,30 @@ import {
 import { HttpResponseService } from "../core/services/http-response.service";
 import { LinkGroupService } from "../services/link-group/link-group.service";
 
-export const ReorderLinkOnGroup = async (
-  _request: Request,
-  _response: Response
-) => {
-  const { userid: _userId } = _request.headers;
-  const reorderlinkRequest: ReorderLinkRequestDto = _request.body;
+export class LinkGroupController {
+  httpResponseService!: HttpResponseService;
 
-  LinkGroupService.reorderLink(
-    reorderlinkRequest,
-    Number(_userId),
-    (error: Error, reorderLinkResponseDto: ReorderLinkResponseDto) => {
-      return HttpResponseService.manageSendResponse(
-        new ManageSendResponse(_response, error, reorderLinkResponseDto, "Link")
-      );
-    }
-  );
-};
+  constructor() {
+    this.httpResponseService = new HttpResponseService();
+  }
+
+  ReorderLinkOnGroup = async (_request: Request, _response: Response) => {
+    const { userid: _userId } = _request.headers;
+    const reorderlinkRequest: ReorderLinkRequestDto = _request.body;
+
+    LinkGroupService.reorderLink(
+      reorderlinkRequest,
+      Number(_userId),
+      (error: Error, reorderLinkResponseDto: ReorderLinkResponseDto) => {
+        return this.httpResponseService.manageSendResponse(
+          new ManageSendResponse(
+            _response,
+            error,
+            reorderLinkResponseDto,
+            "Link"
+          )
+        );
+      }
+    );
+  };
+}

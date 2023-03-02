@@ -11,6 +11,8 @@ export const verifyToken = async (
   response: Response,
   next: CallableFunction
 ) => {
+  const httpResponseService: HttpResponseService = new HttpResponseService();
+  const tokenService: TokenService = new TokenService();
   const token = request.headers.authorization;
   const excludedUrlList: string[] = [
     "/api/notbadcode",
@@ -27,24 +29,24 @@ export const verifyToken = async (
 
   if (!excludedUrlList.includes(request.originalUrl)) {
     if (!token) {
-      return HttpResponseService.sendUnauthrizedResponse(response);
+      return httpResponseService.sendUnauthorizedResponse(response);
     }
 
-    const verifiedToken: any = TokenService.verifyToken(token);
+    const verifiedToken: any = tokenService.verifyToken(token);
 
     if (!verifiedToken) {
-      return HttpResponseService.sendUnauthrizedResponse(response);
+      return httpResponseService.sendUnauthorizedResponse(response);
     }
 
     const validToken: boolean = verifiedToken.valid;
     const userToken: { id: any; userName: string } = verifiedToken.user;
 
     if (!validToken) {
-      return HttpResponseService.sendUnauthrizedResponse(response);
+      return httpResponseService.sendUnauthorizedResponse(response);
     }
 
     if (!userToken || !userToken.id || !userToken.userName) {
-      return HttpResponseService.sendUnauthrizedResponse(response);
+      return httpResponseService.sendUnauthorizedResponse(response);
     }
 
     request.headers[REQUEST_HEADER.USER_ID] = userToken.id;

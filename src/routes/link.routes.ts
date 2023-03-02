@@ -1,35 +1,24 @@
 import { Router } from "express";
 
-import {
-  Create,
-  DeleteLink,
-  GetLinkByUserLinkId,
-  GetLinkListByUserId,
-  GetLinkListByUserIdAndGroupId,
-  ToggleActive,
-  ToggleFavorite,
-  Update,
-} from "../controllers/link.controller";
-
-const linkRoutes = {
-  getAllByUserId: "/getAll",
-  getAllByUserAndGroupId: "/getAllByGroupId/:groupId",
-  getLinkByUserLinkIdAndUserId: "/getLinkByUserLinkIdAndUserId/:userLinkId",
-  create: "/create",
-  update: "/update",
-  delete: "/delete/:userLinkId",
-  toggleFavorite: "/toggleFavorite/:userLinkId",
-  toggleActive: "/toggleActive/:userLinkId",
-};
+import { RouteConstants } from "../constants/route.constant";
+import { LinkController } from "../controllers/link.controller";
 
 const routes = Router();
-routes.get(linkRoutes.getAllByUserId, GetLinkListByUserId);
-routes.get(linkRoutes.getAllByUserAndGroupId, GetLinkListByUserIdAndGroupId);
-routes.get(linkRoutes.getLinkByUserLinkIdAndUserId, GetLinkByUserLinkId);
-routes.post(linkRoutes.create, Create);
-routes.put(linkRoutes.update, Update);
-routes.delete(linkRoutes.delete, DeleteLink);
-routes.put(linkRoutes.toggleFavorite, ToggleFavorite);
-routes.put(linkRoutes.toggleActive, ToggleActive);
+const linkController: LinkController = new LinkController();
+
+routes.get(RouteConstants.link.getAll, linkController.GetLinkListByUserId);
+routes.get(
+  RouteConstants.link.getAllByGroupIdAndGroupId,
+  linkController.GetLinkListByUserIdAndGroupId
+);
+routes.get(
+  RouteConstants.link.getLinkByUserLinkIdAndUserId,
+  linkController.GetLinkByUserLinkId
+);
+routes.post(RouteConstants.link.create, linkController.Create);
+routes.put(RouteConstants.link.update, linkController.Update);
+routes.delete(RouteConstants.link.delete, linkController.DeleteLink);
+routes.put(RouteConstants.link.toggleFavorite, linkController.ToggleFavorite);
+routes.put(RouteConstants.link.toggleActive, linkController.ToggleActive);
 
 export default routes;

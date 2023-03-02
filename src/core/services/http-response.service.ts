@@ -18,10 +18,10 @@ export class HttpResponseService {
    * @param  {HttpResponse} httpResponse
    * @return Response
    */
-  private static sendResponse(
+  private sendResponse<T>(
     _response: Response,
     httpErrorCode: number,
-    httpResponse: HttpResponse
+    httpResponse: HttpResponse<T>
   ): Response | void | void {
     if (!_response.writableFinished) {
       return _response.status(httpErrorCode).json(httpResponse);
@@ -33,11 +33,11 @@ export class HttpResponseService {
    * @param  {Response} _response
    * @returns {Response}
    */
-  public static sendInternalServerErrorResponse(
+  public sendInternalServerErrorResponse(
     _response: Response,
     error: Error
-  ): Response | void | void {
-    return this.sendResponse(
+  ): Response | void {
+    return this.sendResponse<null>(
       _response,
       HTTP_RESPONSE_CODE.INTERNAL_SERVER_ERROR,
       {
@@ -58,11 +58,11 @@ export class HttpResponseService {
    * @param  {string} notFoundEntity - Text for complete not found message
    * @returns Response
    */
-  public static sendNotFoundResponse(
+  public sendNotFoundResponse(
     _response: Response,
     notFoundEntity: string
   ): Response | void {
-    return this.sendResponse(_response, HTTP_RESPONSE_CODE.NOT_FOUND, {
+    return this.sendResponse<null>(_response, HTTP_RESPONSE_CODE.NOT_FOUND, {
       data: null,
       messageResponseList: [
         {
@@ -78,8 +78,8 @@ export class HttpResponseService {
    * @param  {Response} _response
    * @returns Response
    */
-  public static sendForbiddenResponse(_response: Response): Response | void {
-    return this.sendResponse(_response, HTTP_RESPONSE_CODE.FORBIDDEN, {
+  public sendForbiddenResponse(_response: Response): Response | void {
+    return this.sendResponse<null>(_response, HTTP_RESPONSE_CODE.FORBIDDEN, {
       data: null,
       messageResponseList: [
         {
@@ -95,8 +95,8 @@ export class HttpResponseService {
    * @param  {Response} _response
    * @returns Response
    */
-  public static sendUnauthrizedResponse(_response: Response): Response | void {
-    return this.sendResponse(_response, HTTP_RESPONSE_CODE.UNAUTHORIZED, {
+  public sendUnauthorizedResponse(_response: Response): Response | void {
+    return this.sendResponse<null>(_response, HTTP_RESPONSE_CODE.UNAUTHORIZED, {
       data: null,
       messageResponseList: [
         {
@@ -114,12 +114,12 @@ export class HttpResponseService {
    * @param  {any} sendData
    * @returns Response
    */
-  public static sendSuccesResponse(
+  public sendSuccessResponse<T>(
     _response: Response,
     successMessage: string,
-    sendData: any
+    sendData: T
   ): Response | void {
-    return this.sendResponse(_response, HTTP_RESPONSE_CODE.OK, {
+    return this.sendResponse<T>(_response, HTTP_RESPONSE_CODE.OK, {
       data: sendData,
       messageResponseList: [
         {
@@ -130,24 +130,18 @@ export class HttpResponseService {
     });
   }
 
-  public static manageSendResponse(
+  public manageSendResponse(
     manageSendResponse: ManageSendResponse
   ): Response | void {
     const { response, error, resource, resourceDescription } =
       manageSendResponse;
     if (error) {
-      return HttpResponseService.sendInternalServerErrorResponse(
-        response,
-        error
-      );
+      return this.sendInternalServerErrorResponse(response, error);
     }
 
     if (!resource) {
-      return HttpResponseService.sendNotFoundResponse(
-        response,
-        resourceDescription
-      );
+      return this.sendNotFoundResponse(response, resourceDescription);
     }
-    return HttpResponseService.sendSuccesResponse(response, "", resource);
+    return this.sendSuccessResponse(response, "", resource);
   }
 }

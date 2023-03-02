@@ -5,17 +5,17 @@ import { UtilDateService } from "./util-date.service";
 export class UtilStringService {
   /**
    * @description Format string with parameters
-   * @param  {string} formatedData
+   * @param  {string} formattedData
    * @param  {string} parameterDataList? When not exist use current date
    */
   public static formatQuery(
-    formatedData: string,
+    formattedData: string,
     parameterDataList: (string | number | Date)[]
   ): string {
     return parameterDataList
       .map((value) => this.convertToString(value))
       .reduce((previousValue, value, index) => {
-        return (formatedData = formatedData.replace(`{${index}}`, value));
+        return (formattedData = formattedData.replace(`{${index}}`, value));
       }, "");
   }
 
@@ -45,11 +45,9 @@ export class UtilStringService {
    * @param  {string} paraphrase
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static betweenCharactersItsSameOnParaphrase(
-    paraphrase: string
-  ): boolean {
+  public betweenCharactersItsSameOnParaphrase(paraphrase: string): boolean {
     const paraphraseIsValid: boolean =
-      this.ControlParaphraseArgumentIsValid(paraphrase);
+      this.controlParaphraseArgumentIsValid(paraphrase);
 
     if (!paraphraseIsValid) {
       return false;
@@ -81,15 +79,15 @@ export class UtilStringService {
   /**
    * @description Detect if password contains more than two numbers in row
    * @param  {string} paraphrase
-   * @param  {numer} maxNumber
+   * @param  {number} maxNumber
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static paraphraseNotContainsNumberOfNumberInRow(
+  public paraphraseNotContainsNumberOfNumberInRow(
     paraphrase: string,
     maxNumber: number
   ): boolean {
     const paraphraseIsValid: boolean =
-      this.ControlParaphraseArgumentIsValid(paraphrase);
+      this.controlParaphraseArgumentIsValid(paraphrase);
 
     if (!paraphraseIsValid) {
       return false;
@@ -115,14 +113,14 @@ export class UtilStringService {
    * @param  {number} maxNumber
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static paraphraseNotContainsNumberOfNumber(
+  public paraphraseNotContainsNumberOfNumber(
     paraphrase: string,
     maxNumber: number
   ): boolean {
     const paraphraseIsValid: boolean =
-      this.ControlParaphraseArgumentIsValid(paraphrase);
+      this.controlParaphraseArgumentIsValid(paraphrase);
     const maxNumberIsValid: boolean =
-      this.ControlNumberArgumentIsValid(maxNumber);
+      this.controlNumberArgumentIsValid(maxNumber);
 
     if (!paraphraseIsValid || !maxNumberIsValid) {
       return false;
@@ -145,9 +143,9 @@ export class UtilStringService {
    * @param  {string} paraphrase
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static paraphraseNotContainsNumbers(paraphrase: string): boolean {
+  public paraphraseNotContainsNumbers(paraphrase: string): boolean {
     const paraphraseIsValid: boolean =
-      this.ControlParaphraseArgumentIsValid(paraphrase);
+      this.controlParaphraseArgumentIsValid(paraphrase);
 
     if (!paraphraseIsValid) {
       return false;
@@ -169,9 +167,7 @@ export class UtilStringService {
    * @param  {string} paraphrase
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static paraphraseNotContainsLowerCaseChar(
-    paraphrase: string
-  ): boolean {
+  public paraphraseNotContainsLowerCaseChar(paraphrase: string): boolean {
     return !/[a-z]/g.test(paraphrase);
   }
 
@@ -180,9 +176,9 @@ export class UtilStringService {
    * @param  {string} paraphrase
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static praphraseNotContainsUpperChar(paraphrase: string): boolean {
+  public praphraseNotContainsUpperChar(paraphrase: string): boolean {
     const paraphraseIsValid: boolean =
-      this.ControlParaphraseArgumentIsValid(paraphrase);
+      this.controlParaphraseArgumentIsValid(paraphrase);
 
     if (!paraphraseIsValid) {
       return false;
@@ -196,9 +192,9 @@ export class UtilStringService {
    * @param  {string} paraphrase
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static paraphraseNotContainsSpecialChars(paraphrase: string) {
+  public paraphraseNotContainsSpecialChars(paraphrase: string) {
     const paraphraseIsValid: boolean =
-      this.ControlParaphraseArgumentIsValid(paraphrase);
+      this.controlParaphraseArgumentIsValid(paraphrase);
 
     if (!paraphraseIsValid) {
       return false;
@@ -208,7 +204,7 @@ export class UtilStringService {
     return !specialChars.test(paraphrase);
   }
 
-  private static ControlParaphraseArgumentIsValid(paraphrase: string) {
+  private controlParaphraseArgumentIsValid(paraphrase: string) {
     if (
       !paraphrase ||
       typeof paraphrase !== "string" ||
@@ -219,7 +215,7 @@ export class UtilStringService {
     return true;
   }
 
-  private static ControlNumberArgumentIsValid(numberValue: number) {
+  private controlNumberArgumentIsValid(numberValue: number) {
     if (
       (!numberValue && typeof numberValue !== "number") ||
       numberValue === 0

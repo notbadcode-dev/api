@@ -1,23 +1,14 @@
 import { Router } from "express";
 
-import {
-  Create,
-  GetUser,
-  GetUserById,
-  Update,
-} from "../controllers/user.controller";
-
-const userRoutes = {
-  getUser: "/getUser",
-  getById: "/getById/:id",
-  create: "/create",
-  update: "/update",
-};
+import { RouteConstants } from "../constants/route.constant";
+import { UserController } from "../controllers/user.controller";
 
 const routes = Router();
-routes.get(userRoutes.getUser, GetUser);
-routes.get(userRoutes.getById, GetUserById);
-routes.post(userRoutes.create, Create);
-routes.put(userRoutes.update, Update);
+const userController: UserController = new UserController();
+
+routes.get(RouteConstants.user.getUser, userController.GetUser);
+routes.get(RouteConstants.user.getById, userController.GetUserById);
+routes.post(RouteConstants.user.create, userController.Create);
+routes.put(RouteConstants.user.update, userController.Update);
 
 export default routes;

@@ -5,10 +5,7 @@ export class AuthAuxiliarService {
    * @param  {string} paraphrase
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentsForSignIn(
-    userName: string,
-    paraphrase: string
-  ): boolean {
+  verifyArgumentsForSignIn(userName: string, paraphrase: string): boolean {
     if (!userName || typeof userName !== "string" || userName.length === 0) {
       return false;
     }
@@ -30,10 +27,7 @@ export class AuthAuxiliarService {
    * @param  {string} token
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentsForKeepSession(
-    userId: number,
-    token: string
-  ): boolean {
+  verifyArgumentsForKeepSession(userId: number, token: string): boolean {
     if (!userId || typeof userId !== "number" || userId <= 0) {
       return false;
     }

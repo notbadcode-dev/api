@@ -9,6 +9,13 @@ import { AuthQuery } from "./auth.query";
 import { AuthAuxiliarService } from "./auth-auxiliar.service";
 
 export class AuthService extends AuthAuxiliarService {
+  private tokenService!: TokenService;
+
+  constructor() {
+    super();
+    this.tokenService = new TokenService();
+  }
+
   /**
    * @description SignIn with userName and paraphrase
    * @param  {string} userName
@@ -16,7 +23,7 @@ export class AuthService extends AuthAuxiliarService {
    * @param  {CallableFunction} callback - success: token, error: error message
    * @returns {any} - Callback function for get response with token or error message
    */
-  public static async signIn(
+  async signIn(
     userName: string,
     paraphrase: string,
     callback: CallableFunction
@@ -51,7 +58,7 @@ export class AuthService extends AuthAuxiliarService {
       }
     }
 
-    return callback(null, TokenService.generateToken(resultTokenQuery));
+    return callback(null, this.tokenService.generateToken(resultTokenQuery));
   }
 
   /**
@@ -61,7 +68,7 @@ export class AuthService extends AuthAuxiliarService {
    * @param  {CallableFunction} callback - success: boolean with available keep sesion with true or false, error: error message
    * @returns {any} - Callback function for get response with available keep sesion with true or false or error message
    */
-  public static async keepSession(
+  async keepSession(
     userId: number,
     token: string,
     callback: CallableFunction
@@ -76,7 +83,8 @@ export class AuthService extends AuthAuxiliarService {
       return callback(ERROR_MESSAGE_AUTH.ERROR_ON_KEEP_SESSION);
     }
 
-    const verifyUserToken: VerifyUserToken = TokenService.verifyToken(token);
+    const verifyUserToken: VerifyUserToken =
+      this.tokenService.verifyToken(token);
     const userFromVerifyToken: User | null = verifyUserToken.user ?? null;
     if (resultUserQuery && userFromVerifyToken) {
       return callback(null, Number(userId) === Number(userFromVerifyToken.id));

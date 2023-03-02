@@ -1,6 +1,9 @@
+import { TinyInt } from "../../core/enums/global.enum";
 import { UserLinkDto, UserLinkDtoHelper } from "../../core/models/link.model";
+import { GroupLinkEntity } from "../../entity/group-link.entity";
+import { UserLinkEntity } from "../../entity/user-link.entity";
 
-export class LinkAuxiliarService {
+export class LinkExtensionService {
   /**
    * @description Verify arguments for getLinkListByUserId function
    * @param  {number} userId
@@ -8,7 +11,7 @@ export class LinkAuxiliarService {
    * @param  {number} favorite - 1: favorite, 0: not favorite
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForGetLinkListByUserId(
+  verifyArgumentForGetLinkListByUserId(
     userId: number,
     active: number,
     favorite: number
@@ -17,16 +20,13 @@ export class LinkAuxiliarService {
       return false;
     }
 
-    if (!active || typeof active !== "number" || active <= 0 || active > 1) {
+    const tinyIntValidList: number[] = [0, 1];
+
+    if (!tinyIntValidList.includes(active)) {
       return false;
     }
 
-    if (
-      !favorite ||
-      typeof favorite !== "number" ||
-      favorite <= 0 ||
-      favorite > 1
-    ) {
+    if (!tinyIntValidList.includes(favorite)) {
       return false;
     }
 
@@ -39,7 +39,7 @@ export class LinkAuxiliarService {
    * @param  {number} groupId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForGetLinkListByUserIdAndGroupId(
+  verifyArgumentForGetLinkListByUserIdAndGroupId(
     userId: number,
     groupId: number
   ): boolean {
@@ -60,7 +60,7 @@ export class LinkAuxiliarService {
    * @param  {number} userId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForGetLinkByUserLinkIdAndUserId(
+  verifyArgumentForGetLinkByUserLinkIdAndUserId(
     userLinkId: number,
     userId: number
   ): boolean {
@@ -81,10 +81,7 @@ export class LinkAuxiliarService {
    * @param  {number} userId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForCreate(
-    link: UserLinkDto,
-    userId: number
-  ): boolean {
+  verifyArgumentForCreate(link: UserLinkDto, userId: number): boolean {
     if (!link || !link.link) {
       return false;
     }
@@ -103,7 +100,7 @@ export class LinkAuxiliarService {
    * @param  {UserLinkDto} link
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForAssociatedLinkToUserLink(
+  verifyArgumentForAssociatedLinkToUserLink(
     userId: number,
     linkId: number,
     link: UserLinkDto
@@ -129,10 +126,7 @@ export class LinkAuxiliarService {
    * @param  {number} userId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForDelete(
-    userLinkId: number,
-    userId: number
-  ): boolean {
+  verifyArgumentForDelete(userLinkId: number, userId: number): boolean {
     if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
       return false;
     }
@@ -150,10 +144,7 @@ export class LinkAuxiliarService {
    * @param  {number} userId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForToggleFavorite(
-    userLinkId: number,
-    userId: number
-  ): boolean {
+  verifyArgumentForToggleFavorite(userLinkId: number, userId: number): boolean {
     if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
       return false;
     }
@@ -171,10 +162,7 @@ export class LinkAuxiliarService {
    * @param  {number} userId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForUpdate(
-    link: UserLinkDto,
-    userId: number
-  ): boolean {
+  verifyArgumentForUpdate(link: UserLinkDto, userId: number): boolean {
     if (!userId || typeof userId !== "number" || userId <= 0) {
       return false;
     }
@@ -192,10 +180,7 @@ export class LinkAuxiliarService {
    * @param  {number} userId
    * @returns {boolean} - true: valid, false: invalid
    */
-  protected static verifyArgumentForToggleActive(
-    userLinkId: number,
-    userId: number
-  ): boolean {
+  verifyArgumentForToggleActive(userLinkId: number, userId: number): boolean {
     if (!userLinkId || typeof userLinkId !== "number" || userLinkId <= 0) {
       return false;
     }
@@ -205,35 +190,5 @@ export class LinkAuxiliarService {
     }
 
     return true;
-  }
-
-  /**
-   * @description Filtered and return only active links
-   * @param  {UserLinkDto[]} linkList
-   * @param  {number} active - 1: active, 0: inactive
-   * @param  {number} favorite - 1: favorite, 0: not favorite
-   */
-  protected static filteredLinkList(
-    linkList: UserLinkDto[],
-    active: number,
-    favorite: number
-  ): UserLinkDto[] {
-    let mappingLinkList = UserLinkDtoHelper.mapToObjectList(linkList);
-
-    if (!isNaN(active)) {
-      const isActive: boolean = active > 0 ? true : false;
-      mappingLinkList = mappingLinkList.filter(
-        (link) => link.active === isActive
-      );
-    }
-
-    if (!isNaN(favorite)) {
-      const isFavorite: boolean = favorite > 0 ? true : false;
-      mappingLinkList = mappingLinkList.filter(
-        (link) => link.favorite === isFavorite
-      );
-    }
-
-    return mappingLinkList;
   }
 }

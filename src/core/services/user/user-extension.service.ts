@@ -3,7 +3,34 @@ import { USER } from "../../../constants/user.constant";
 import { User } from "../../models/user.model";
 import { UtilStringService } from "../../utils/util-string.service";
 
-export class UserAuxiliarService {
+export class UserExtensionService {
+  utilStringService!: UtilStringService;
+
+  constructor() {
+    this.utilStringService = new UtilStringService();
+  }
+
+  /**
+   * @description Verify arguments for getById function
+   * @param  {User} updateUser
+   * @returns {boolean} - true: valid, false: invalid
+   */
+  protected validateUserId(userId: number): boolean {
+    const USER_ID_IS_INVALID: boolean =
+      !userId || typeof userId !== "number" || userId <= 0;
+    return USER_ID_IS_INVALID;
+  }
+
+  /**
+   * @description Verify arguments for getByName function
+   * @param  {User} updateUser
+   * @returns {boolean} - true: valid, false: invalid
+   */
+  protected validateUserName(userName: string): boolean {
+    const USER_NAME_IS_INVALID: boolean = !userName || !userName?.length;
+    return USER_NAME_IS_INVALID;
+  }
+
   /**
    * @description Verify arguments for update function
    * @param  {User} updateUser
@@ -46,7 +73,7 @@ export class UserAuxiliarService {
    * @param  {string} userName
    * @returns string - Empty string if userName is good
    */
-  protected static controlUserNameIsGood(userName: string): string {
+  protected controlUserNameIsGood(userName: string): string {
     const transformUserName: string = userName.trim().toLowerCase();
 
     if (transformUserName.trim().length === 0) {
@@ -58,7 +85,7 @@ export class UserAuxiliarService {
     }
 
     if (
-      UtilStringService.betweenCharactersItsSameOnParaphrase(
+      this.utilStringService.betweenCharactersItsSameOnParaphrase(
         transformUserName.split(USER.EMAIL_SYMBOL)[0]
       )
     ) {
@@ -73,7 +100,7 @@ export class UserAuxiliarService {
    * @param  {string} password
    * @returns string - Empty string if userName is good
    */
-  protected static controlPasswordIsGood(password: string): string {
+  protected controlPasswordIsGood(password: string): string {
     const transformPassword: string = password.trim();
 
     if (transformPassword.length !== USER.ALLOWED_CHARACTERS_PASSWORD) {
@@ -81,7 +108,7 @@ export class UserAuxiliarService {
     }
 
     if (
-      UtilStringService.paraphraseNotContainsNumberOfNumber(
+      this.utilStringService.paraphraseNotContainsNumberOfNumber(
         transformPassword,
         USER.ALLOWED_NUMBERS_ON_PASSWORD
       )
@@ -90,7 +117,7 @@ export class UserAuxiliarService {
     }
 
     if (
-      UtilStringService.paraphraseNotContainsNumberOfNumberInRow(
+      this.utilStringService.paraphraseNotContainsNumberOfNumberInRow(
         transformPassword,
         USER.ALLOWED_NUMBERS_IN_ROW_ON_PASSWORD
       )
@@ -98,22 +125,30 @@ export class UserAuxiliarService {
       return ERROR_MESSAGE_USER.PASSWORD_CONTAINS_MORE_THAN_TWO_NUMBERS_IN_ROW;
     }
 
-    if (UtilStringService.paraphraseNotContainsNumbers(transformPassword)) {
+    if (
+      this.utilStringService.paraphraseNotContainsNumbers(transformPassword)
+    ) {
       return ERROR_MESSAGE_USER.PASSWORD_NOT_CONSTAINS_NUMBERS;
     }
 
     if (
-      UtilStringService.paraphraseNotContainsLowerCaseChar(transformPassword)
+      this.utilStringService.paraphraseNotContainsLowerCaseChar(
+        transformPassword
+      )
     ) {
       return ERROR_MESSAGE_USER.PASSWORD_NOT_CONSTAINS_LOWER_NUMBERS;
     }
 
-    if (UtilStringService.praphraseNotContainsUpperChar(transformPassword)) {
+    if (
+      this.utilStringService.praphraseNotContainsUpperChar(transformPassword)
+    ) {
       return ERROR_MESSAGE_USER.PASSWORD_NOT_CONSTAINS_UPPER_NUMBERS;
     }
 
     if (
-      UtilStringService.paraphraseNotContainsSpecialChars(transformPassword)
+      this.utilStringService.paraphraseNotContainsSpecialChars(
+        transformPassword
+      )
     ) {
       return ERROR_MESSAGE_USER.PASSWORD_NOT_CONSTAINS_SPECIAL_CHARACTER;
     }

@@ -8,7 +8,7 @@ export const ERROR_MESSAGE_AUTH = {
 };
 
 export const ERROR_MESSAGE_USER = {
-  USER_ALREADE_EXIST_SAME_USERNAME: "User already exist with same username",
+  USER_ALREADY_EXIST_SAME_USERNAME: "User already exist with same username",
   USERNAME_IS_EMPTY: "Username is empty",
   USERNAME_NOT_EMAIL: "User name is not email",
   USERNAME_IS_SUSPICIOUS: "User name is suspicious",

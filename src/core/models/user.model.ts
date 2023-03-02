@@ -1,5 +1,7 @@
 import { JsonWebTokenError } from "jsonwebtoken";
 
+import { UserEntity } from "../../entity/user.entity";
+
 export class User {
   constructor(
     public id: number,
@@ -15,7 +17,7 @@ export class UserHelper {
     return new User(0, "");
   }
 
-  public static mapToObject(user: User): User {
+  public static mapToObject(user: UserEntity): User {
     if (user) {
       return new User(
         user.id,

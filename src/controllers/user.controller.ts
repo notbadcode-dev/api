@@ -5,66 +5,76 @@ import { User } from "../core/models/user.model";
 import { HttpResponseService } from "../core/services/http-response.service";
 import { UserService } from "../core/services/user/user.service";
 
-/**
- * @description Get user by token
- * @param  {Request} _request
- * @param  {Response} _response
- * @returns Response - User
- */
-export const GetUser = async (_request: Request, _response: Response) => {
-  const token = _request.headers.authorization || "";
+export class UserController {
+  private userService!: UserService;
+  private httpResponseService!: HttpResponseService;
 
-  UserService.get(token, (error: Error, user: User) => {
-    return HttpResponseService.manageSendResponse(
-      new ManageSendResponse(_response, error, user, "User")
-    );
-  });
-};
+  constructor() {
+    this.userService = new UserService();
+    this.httpResponseService = new HttpResponseService();
+  }
 
-/**
- * @description Get any user by id
- * @param  {Request} _request
- * @param  {Response} _response
- * @returns Response - User
- */
-export const GetUserById = async (_request: Request, _response: Response) => {
-  const { id: _id } = _request.params;
+  /**
+   * @description Get user by token
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - User
+   */
+  GetUser = async (_request: Request, _response: Response) => {
+    const token = _request.headers.authorization || "";
 
-  UserService.getById(Number(_id), (error: Error, user: User) => {
-    return HttpResponseService.manageSendResponse(
-      new ManageSendResponse(_response, error, user, "User")
-    );
-  });
-};
+    this.userService.get(token, (error: Error, user: User) => {
+      return this.httpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, user, "User")
+      );
+    });
+  };
 
-/**
- * @description Create user
- * @param  {Request} _request
- * @param  {Response} _response
- * @returns Response - User
- */
-export const Create = async (_request: Request, _response: Response) => {
-  const _user: User = _request.body;
+  /**
+   * @description Get any user by id
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - User
+   */
+  GetUserById = async (_request: Request, _response: Response) => {
+    const { id: _id } = _request.params;
 
-  UserService.create(_user, (error: Error, user: User) => {
-    return HttpResponseService.manageSendResponse(
-      new ManageSendResponse(_response, error, user, "User")
-    );
-  });
-};
+    this.userService.getById(Number(_id), (error: Error, user: User) => {
+      return this.httpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, user, "User")
+      );
+    });
+  };
 
-/**
- * @description Create user
- * @param  {Request} _request
- * @param  {Response} _response
- * @returns Response - User
- */
-export const Update = async (_request: Request, _response: Response) => {
-  const _user: User = _request.body;
+  /**
+   * @description Create user
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - User
+   */
+  Create = async (_request: Request, _response: Response) => {
+    const _user: User = _request.body;
 
-  UserService.update(_user, (error: Error, user: User) => {
-    return HttpResponseService.manageSendResponse(
-      new ManageSendResponse(_response, error, user, "User")
-    );
-  });
-};
+    this.userService.create(_user, (error: Error, user: User) => {
+      return this.httpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, user, "User")
+      );
+    });
+  };
+
+  /**
+   * @description Create user
+   * @param  {Request} _request
+   * @param  {Response} _response
+   * @returns Response - User
+   */
+  Update = async (_request: Request, _response: Response) => {
+    const _user: User = _request.body;
+
+    this.userService.update(_user, (error: Error, user: User) => {
+      return this.httpResponseService.manageSendResponse(
+        new ManageSendResponse(_response, error, user, "User")
+      );
+    });
+  };
+}

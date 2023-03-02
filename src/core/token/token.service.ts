@@ -11,7 +11,7 @@ export class TokenService {
    * @param  {string} userId
    * @returns {string} - token for user
    */
-  public static generateToken(user: User): any {
+  public generateToken(user: User): any {
     if (user && user.id) {
       const token = jwt.sign(
         { id: user.id, userName: user.userName },
@@ -27,11 +27,11 @@ export class TokenService {
   }
 
   /**
-   * @description Veirify token for any user
+   * @description Verify token for any user
    * @param  {string} token
    * @returns {boolean} - valid: true, invalid: false
    */
-  public static verifyToken(token: string): any {
+  public verifyToken(token: string): any {
     if (token && typeof token === "string" && token.length > 0) {
       return jwt.verify(
         token,
@@ -39,9 +39,7 @@ export class TokenService {
         (err: any, decode: any) => {
           return {
             valid: !err,
-            user: decode
-              ? UserHelper.mapToObject(decode)
-              : UserHelper.defaultObject(),
+            user: UserHelper.mapToObject(decode),
             token: token,
             verifyError: err ?? null,
           };
